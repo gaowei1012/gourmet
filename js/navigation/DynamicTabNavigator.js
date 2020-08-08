@@ -32,7 +32,7 @@ const TABS = {
   Order: {
     screen: Order,
     navigationOptions: {
-      tabBarLabel: '我的土地',
+      tabBarLabel: '订单',
       tabBarIcon: ({tintColor, focused}) => {
         return (
           <TabBarItem
@@ -48,7 +48,7 @@ const TABS = {
   Personal: {
     screen: Personal,
     navigationOptions: {
-      tabBarLabel: '账户设置',
+      tabBarLabel: '我的',
       tabBarIcon: ({tintColor, focused}) => {
         return (
           <TabBarItem
