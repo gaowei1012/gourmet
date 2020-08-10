@@ -1,7 +1,6 @@
 import React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
-import { px2dp } from '../utils/px2dp'
-import { width } from '../utils/screenUtil'
+import { px2dp, width} from '../utils/px2dp'
 
 export default class TabBar extends React.Component {
     static defaultPorps = {
@@ -30,11 +29,14 @@ export default class TabBar extends React.Component {
                     <TouchableOpacity
                         key={item.id}
                         style={styles.itemBtn}
+                        activeOpacity={1}
                         onPress={() => this.setInex(index)}
                         onLayout={e => this.setLout(e.nativeEvent.layout, index)}
                     >
-                        <Text style={[styles.item, this.state.index === index ? styles.active : '']}>{item.name}</Text>
-                        <View style={[styles.line, this.state.index === index ? styles.active2 : '']} />
+                        <View style={[this.state.index === index ? styles.itemBox : null]}>
+                            <Text style={[styles.item, this.state.index === index ? styles.active : '']}>{item.name}</Text>
+                        </View>
+                        <View style={[this.state.index === index ? styles.active2 : '']} />
                     </TouchableOpacity>
                 )}
             </ScrollView>
@@ -93,27 +95,36 @@ const styles = StyleSheet.create({
         paddingTop: px2dp(2),
         flexDirection: 'column',
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        marginHorizontal: px2dp(12)
     },
     item: {
-        fontSize: px2dp(28),
-        color: "#858385",
+        fontSize: px2dp(14),
+        color: "#858385"
     },
     active: {
-        color: "#d0648f"
+        color: "#fff",
+        paddingHorizontal: px2dp(6),
+        paddingVertical: px2dp(6),
+        fontWeight: '600'
     },
-    line: {
-        width: px2dp(20),
-        height: px2dp(2),
-        backgroundColor: "#fbfafc",
-        marginTop: px2dp(5),
-        marginBottom: px2dp(2),
-    },
+    // line: {
+    //     width: px2dp(20),
+    //     height: px2dp(2),
+    //     backgroundColor: "#fbfafc",
+    //     marginTop: px2dp(5),
+    //     marginBottom: px2dp(2),
+    // },
     active2: {
-        backgroundColor: "#d0648f"
+        // backgroundColor: "#d0648f",
+        // backgroundColor: 'red'
     },
     sortimg: {
         width: px2dp(55),
         height: px2dp(40),
+    },
+    itemBox: {
+        borderRadius: px2dp(20),
+        backgroundColor: 'red'
     }
 })
