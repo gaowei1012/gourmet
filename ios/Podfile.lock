@@ -1,4 +1,7 @@
 PODS:
+  - AMap3DMap (7.5.0):
+    - AMapFoundation (~> 1.6.3)
+  - AMapFoundation (1.6.3)
   - boost-for-react-native (1.63.0)
   - BVLinearGradient (2.5.6):
     - React
@@ -238,6 +241,9 @@ PODS:
     - React-cxxreact (= 0.63.2)
     - React-jsi (= 0.63.2)
   - React-jsinspector (0.63.2)
+  - react-native-amap3d (2.0.2):
+    - AMap3DMap (~> 7.5.0)
+    - React
   - react-native-contacts (5.2.5):
     - React
   - react-native-image-picker (2.3.3):
@@ -356,6 +362,7 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
+  - react-native-amap3d (from `../node_modules/react-native-amap3d/lib/ios`)
   - react-native-contacts (from `../node_modules/react-native-contacts`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-orientation (from `../node_modules/react-native-orientation`)
@@ -378,6 +385,8 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - AMap3DMap
+    - AMapFoundation
     - boost-for-react-native
     - CocoaAsyncSocket
     - CocoaLibEvent
@@ -424,6 +433,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
+  react-native-amap3d:
+    :path: "../node_modules/react-native-amap3d/lib/ios"
   react-native-contacts:
     :path: "../node_modules/react-native-contacts"
   react-native-image-picker:
@@ -464,6 +475,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  AMap3DMap: fc7c911f5cf079d544ad7faec256c9554cbbb202
+  AMapFoundation: 9ed923193b357ebb30a073e9fe255d3c24054d5a
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   CocoaAsyncSocket: 694058e7c0ed05a9e217d1b3c7ded962f4180845
@@ -491,6 +504,7 @@ SPEC CHECKSUMS:
   React-jsi: 54245e1d5f4b690dec614a73a3795964eeef13a8
   React-jsiexecutor: 8ca588cc921e70590820ce72b8789b02c67cce38
   React-jsinspector: b14e62ebe7a66e9231e9581279909f2fc3db6606
+  react-native-amap3d: 824b084df199c58840196b1aa8706cb8bfb5f08b
   react-native-contacts: 0ed0dc4d5154c9181657837913bdfac6bba3469b
   react-native-image-picker: a6c3d644751a388b0fc8b56822ff7cbd398a3008
   react-native-orientation: d4a97266b06ec8d45d74e626656a730ebbebbb6f
