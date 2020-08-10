@@ -14,6 +14,7 @@ import Home from '../views/Home/Home';
 import Index from '../views/Index/Index';
 import Order from '../views/Order/Order';
 import Personal from '../views/Personal/Personal';
+import Login from '../views/Personal/Login';
 
 
 
@@ -49,6 +50,12 @@ const MainNavigator = createStackNavigator({
     },
     Order: {
         screen: Order,
+        navigationOptions: {
+            header: null
+        }
+    },
+    Login: {
+        screen: Login,
         navigationOptions: {
             header: null
         }
