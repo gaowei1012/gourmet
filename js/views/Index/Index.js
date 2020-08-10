@@ -2,7 +2,6 @@ import React from 'react'
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, Image } from 'react-native'
 import { px2dp, height } from '../../utils/px2dp'
 import TabBar from '../../components/TabBar'
-import {Text} from 'react-native-elements'
 
 class Index extends React.PureComponent {
     state = {
