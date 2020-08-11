@@ -31,6 +31,11 @@ class Index extends React.PureComponent {
                     source={{uri: this.state.url}}
                 />
             </ScrollView>
+        );
+        const _step = (
+            <View style={styles.stepBox}>
+                <Text>step</Text>
+            </View>
         )
         return (
             <SafeAreaView style={styles.landContainer}>
@@ -41,6 +46,7 @@ class Index extends React.PureComponent {
                     onChange={(index, id, type) => this.onChangeTab(index, id, type)}
                 />
                 {_content}
+                {_step}
             </SafeAreaView>
         )
     }
@@ -56,7 +62,6 @@ const styles = StyleSheet.create({
         width: px2dp(300),
         height: px2dp(300),
         borderRadius: px2dp(8),
-        backgroundColor: '#eee',
         marginHorizontal: px2dp(16),
         marginVertical: px2dp(26)
     }
