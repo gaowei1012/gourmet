@@ -57,8 +57,12 @@ class Order extends React.PureComponent {
                         />
                     </View>
                 </View> : null}
-                {this.state.type === 2 ? <View>
-                    
+                {this.state.type === 2 ? <View style={styles.carryBox}>
+                    <View style={styles.carryTop}>
+                        <View style={styles.carryLine}/>
+                        <Text style={styles.carryTitle}>等待评价</Text>
+                    </View>
+                    <Text style={styles.pingDesc}>评价描述</Text>
                 </View> : null}
             </>
         )
@@ -127,6 +131,31 @@ const styles = StyleSheet.create({
     },
     desc: {
         marginVertical: px2dp(5),
+        paddingHorizontal: px2dp(10)
+    },
+    carryBox: {
+        width: px2dp(345),
+        alignSelf: 'center',
+    },
+    carryTop: {
+        marginVertical: px2dp(8),
+        marginHorizontal: px2dp(3),
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    carryLine: {
+        height: px2dp(20),
+        width: px2dp(2),
+        backgroundColor: 'red',
+        borderRadius: px2dp(6)
+    },
+    carryTitle: {
+        fontSize: px2dp(20),
+        marginLeft: px2dp(6)
+    },
+    pingDesc: {
+        fontSize: px2dp(12),
+        color: '#333',
         paddingHorizontal: px2dp(10)
     }
 })
