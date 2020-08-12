@@ -1,8 +1,9 @@
 import React from 'react'
-import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet, ScrollView} from 'react-native'
 import TopNavigationBar from '../../common/TopNavigationBar'
 import { px2dp, width, height } from '../../utils/px2dp'
-import {Button} from 'react-native-elements'
+import { Button } from 'react-native-elements'
+import List from '../../components/List'
 
 class Order extends React.PureComponent {
     state = {
@@ -13,7 +14,7 @@ class Order extends React.PureComponent {
         type: 1,
     }
     swtchTab = (type) => {
-        this.setState({type})
+        this.setState({ type })
     }
     render() {
         const StatusBar = {
@@ -38,7 +39,7 @@ class Order extends React.PureComponent {
                         onPress={() => this.swtchTab(m.type)}
                     >
                         <Text style={[styles.menuText, this.state.type === m.type ? styles.acMenuText : null]}>{m.text}</Text>
-                        <View style={[styles.line, this.state.type === m.type ? styles.AcLine : null]}/>
+                        <View style={[styles.line, this.state.type === m.type ? styles.AcLine : null]} />
                     </TouchableOpacity>
                 ))}
             </View>
@@ -47,7 +48,7 @@ class Order extends React.PureComponent {
             <>
                 {this.state.type === 1 ? <View>
                     <View style={styles.noOrderBox}>
-                        <View style={styles.l}/>
+                        <View style={styles.l} />
                         <Text style={styles.desc}>预计送达时间12:30</Text>
                         <Text style={styles.desc}>由店家配送</Text>
                         <Button
@@ -59,10 +60,16 @@ class Order extends React.PureComponent {
                 </View> : null}
                 {this.state.type === 2 ? <View style={styles.carryBox}>
                     <View style={styles.carryTop}>
-                        <View style={styles.carryLine}/>
+                        <View style={styles.carryLine} />
                         <Text style={styles.carryTitle}>等待评价</Text>
                     </View>
                     <Text style={styles.pingDesc}>评价描述</Text>
+                    <ScrollView
+                        style={{height: '100%'}}
+                        horizontal={false}
+                    >
+                        <List/>
+                    </ScrollView>
                 </View> : null}
             </>
         )
@@ -156,6 +163,7 @@ const styles = StyleSheet.create({
     pingDesc: {
         fontSize: px2dp(12),
         color: '#333',
-        paddingHorizontal: px2dp(10)
+        paddingHorizontal: px2dp(10),
+        marginVertical: px2dp(6)
     }
 })
