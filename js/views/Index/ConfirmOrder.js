@@ -1,10 +1,15 @@
 import React from 'react'
-import {View,Text,StyleSheet,TouchableOpacity,SafeAreaView} from 'react-native'
-import {px2dp} from '../../utils/px2dp'
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, TextInput } from 'react-native'
+import { px2dp, width } from '../../utils/px2dp'
 import TopNavigationBar from '../../common/TopNavigationBar'
-import {GoBack} from '../../utils/GoBack'
+import { GoBack } from '../../utils/GoBack'
+import CheckBox from '../../components/CheckBox'
+import OrderItem from '../../components/OrderItem'
 
 class ConfirmOrder extends React.PureComponent {
+    state={
+        isCheckBox: false
+    }
     render() {
         const StatusBar = {
             backgroundColor: "#ffffff",
@@ -19,10 +24,82 @@ class ConfirmOrder extends React.PureComponent {
                 leftButton={GoBack(this.props)}
             />
         );
+        const _header = (
+            <View style={styles.headerBox}>
+                <View style={styles.addressBox}>
+                    <Text style={styles.addressTitle}>订单配送至</Text>
+                    <Text style={styles.address}>address</Text>
+                    <Text style={styles.tel}>1214515</Text>
+                </View>
+            </View>
+        );
+        const _content = (
+            <View style={styles.contentBox}>
+                <View style={styles.selectBox}>
+                    <CheckBox
+                        isCheckBox={this.state.isCheckBox}
+                        onCheckBox={() => {
+                            this.setState({isCheckBox: !this.state.isCheckBox})
+                        }}
+                    />
+                    <Text style={styles.selectText}>全选</Text>
+                </View>
+                <View style={styles.contentOrder}>
+                    <CheckBox
+                        isCheckBox={''}
+                        onCheckBox={() => {}}
+                    />
+                    <OrderItem
+                        title={'title'}
+                        desc={'desc'}
+                        num={'1212'}
+                        url={'https://iph.href.lu/80x80?fg=666666&bg=cccccc'}
+                    />
+                </View>
+            </View>
+        );
+        const peisong = (
+            <View style={styles.pingSongBox}>
+                <View style={styles.songDa}>
+                    <Text style={styles.timeTitle}>送达时间</Text>
+                    <Text style={styles.time}>11:30</Text>
+                </View>
+                <View style={styles.songDa}>
+                    <Text style={styles.timeTitle}>配送服务</Text>
+                    <Text style={styles.notime}>11:30</Text>
+                </View>
+                <View style={styles.songDa}>
+                    <Text style={styles.timeTitle}>订单配送</Text>
+                    <TextInput
+                        placeholder='这里可以输入内容'
+                    />
+                </View>
+            </View>
+        );
+        const _fotter = (
+            <View style={styles.fotterBox}>
+                <View style={styles.leftBox}>
+                    <Text style={styles.he}>合计</Text>
+                    <Text style={styles.jia}>￥18:00</Text>
+                    <Text style={styles.line}>|</Text>
+                    <Text style={styles.you}>以优惠5元</Text>
+                </View>
+                <TouchableOpacity
+                    style={styles.ConfirmBtn}
+                    onPress={this._confirm}
+                    activeOpacity={1}
+                >
+                    <Text style={styles.ConfirmText}>确认支付</Text>
+                </TouchableOpacity>
+            </View>
+        )
         return (
             <SafeAreaView style={styles.container}>
                 {renderTop}
-                <Text>订单</Text>
+                {_header}
+                {_content}
+                {peisong}
+                {_fotter}
             </SafeAreaView>
         )
     }
@@ -32,6 +109,144 @@ export default ConfirmOrder
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        backgroundColor: '#F6F7F6'
+    },
+    headerBox: {
+        width: width,
+        height: px2dp(130),
+        backgroundColor: '#E8785F'
+    },
+    addressBox: {
+        width: px2dp(345),
+        alignSelf: 'center'
+    },
+    addressTitle: {
+        color: '#fff',
+        fontSize: px2dp(14),
+        fontWeight: '600',
+        lineHeight: px2dp(16)
+    },
+    address: {
+        color: '#fff',
+        fontSize: px2dp(18),
+        fontWeight: '600',
+        lineHeight: px2dp(28)
+    },
+    tel: {
+        color: '#fff',
+        fontSize: px2dp(12),
+        fontWeight: '500',
+        lineHeight: px2dp(18)
+    },
+    contentBox: {
+        width: px2dp(345),
+        // height: px2dp(370),
+        alignSelf: 'center',
+        backgroundColor: '#fff',
+        borderRadius: px2dp(8),
+        marginTop: px2dp(-60),
+        // shadowColor: '#C5C5C5',  //设置阴影色
+        // shadowOffset: { width: 0, height: 0 },  //设置阴影偏移,该值会设置整个阴影的偏移，width可以看做x,height可以看做y,x向右为正，y向下为正
+        // shadowOpacity: 1,
+        // shadowRadius: 1,
+        // elevation: 1, // 适配安卓
+    },
+    selectBox: {
+        flexDirection:'row',
+        paddingHorizontal: px2dp(10),
+        paddingVertical: px2dp(12),
+        alignItems: 'center',
+        width: '100%',
+        borderBottomColor: '#BBBBBB',
+        borderBottomWidth: px2dp(.4)
+    },
+    selectText: {
+        color: '#000',
+        marginLeft: px2dp(8),
+        fontWeight: '400',
+        fontSize: px2dp(14)
+    },
+    fotterBox: {
+        position: 'absolute',
+        height: px2dp(60),
+        width: width,
+        bottom: 0,
+        left: 0,
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        backgroundColor: '#fff'
+    },
+    leftBox: {
+        flexDirection: 'row',
+        alignItems:'center',
+        marginLeft: px2dp(30)
+    },
+    you: {
+        color: '#CFCECE',
+        fontSize: px2dp(12),
+        marginLeft: px2dp(4),
+        fontWeight: '500'
+    },
+    jia: {
+        marginLeft: px2dp(4),
+        color: '#E8785F',
+        fontWeight: '600',
+        fontSize: px2dp(14)
+    },
+    line: {
+        color: '#CFCECE',
+        marginLeft: px2dp(4)
+    },
+    ConfirmBtn: {
+        height: '100%',
+        width: px2dp(120),
+        backgroundColor: '#E8785F',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    ConfirmText: {
+        color: '#fff',
+        fontSize: px2dp(16),
+        fontWeight: '600'
+    },
+    pingSongBox: {
+        width: px2dp(345),
+        height: px2dp(120),
+        alignSelf: 'center',
+        backgroundColor: '#fff',
+        borderRadius: px2dp(8),
+        marginTop: px2dp(20),
+        //shadowColor: '#C5C5C5',  //设置阴影色
+        // shadowOffset: { width: 0, height: 0 },  //设置阴影偏移,该值会设置整个阴影的偏移，width可以看做x,height可以看做y,x向右为正，y向下为正
+        // shadowOpacity: 1,
+        // shadowRadius: 1,
+        // elevation: 1, // 适配安卓
+    },
+    songDa: {
+        flexDirection: 'row',
+        paddingHorizontal: px2dp(12),
+        paddingVertical: px2dp(12),
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
+    timeTitle: {
+        color: '#000',
+        fontSize:px2dp(14)
+    },
+    time: {
+        color: '#E8785F',
+        fontSize: px2dp(14)
+    },
+    notime: {
+        color: '#000',
+        fontSize: px2dp(14)
+    },
+    contentOrder: {
+        paddingHorizontal: px2dp(10),
+        paddingVertical: px2dp(10),
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '100%'
     }
 })
