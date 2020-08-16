@@ -22,7 +22,6 @@ RecommenItem.propTypes = {
     goToPage: PropTypes.func
 }
 
-
 export default RecommenItem
 
 const styles = StyleSheet.create({
@@ -33,7 +32,7 @@ const styles = StyleSheet.create({
         borderRadius: px2dp(6),
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#ddd',
+        backgroundColor: '#F6F7F6',
         paddingHorizontal: px2dp(8)
     },
     image: {
@@ -42,8 +41,10 @@ const styles = StyleSheet.create({
         borderRadius: px2dp(6)
     },
     recommenText: {
+        width: px2dp(260),
         marginLeft: px2dp(6),
         fontSize: px2dp(14),
-        color: '#333'
+        color: '#141414',
+        lineHeight: px2dp(18)
     }
 })

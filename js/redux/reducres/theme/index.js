@@ -3,7 +3,7 @@ import { THEME_CHANGE } from '../../actions/theme';
 
 // 默认颜色
 const defauleState = {
-    theme: '#098643'
+    theme: '#E8785F'
 }
 
 export default function onAction(state = defauleState, action) {
