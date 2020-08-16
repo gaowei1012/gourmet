@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import { px2dp } from '../utils/px2dp'
 
-function OrderItem({ url, title, desc, num }) {
+function OrderItem({ url, title, desc, num, onAdd, onLess, disabled, priceNum }) {
     return (
         <View style={styles.OrderBox}>
             <Image style={styles.imageBox} source={{ uri: url }} />
@@ -11,13 +11,22 @@ function OrderItem({ url, title, desc, num }) {
                 <Text style={styles.desc}>{desc}</Text>
                 <View style={styles.pricBox}>
                     <Text>{num}</Text>
-                    <View style={{flexDirection: 'row'}}>
-                        <TouchableOpacity>
-                            <Text>-</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <TouchableOpacity
+                            onPress={onLess}
+                            activeOpacity={1}
+                            disabled={disabled}
+                            style={styles.lessBtn}
+                        >
+                            <Text style={styles.less}>-</Text>
                         </TouchableOpacity>
-                        <Text>1</Text>
-                        <TouchableOpacity>
-                            <Text>+</Text>
+                        <Text>{priceNum}</Text>
+                        <TouchableOpacity
+                            style={styles.addBtn}
+                            activeOpacity={1}
+                            onPress={onAdd}
+                        >
+                            <Text style={styles.add}>+</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -62,6 +71,32 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        width: px2dp(200)
+        width: px2dp(200),
+    },
+    lessBtn: {
+        width: px2dp(18),
+        height: px2dp(18),
+        borderRadius: px2dp(9),
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderWidth: px2dp(2),
+        borderColor: '#E8785F',
+        marginRight: px2dp(6)
+    },
+    less: {
+        color: '#000',
+    },
+    addBtn: {
+        width: px2dp(18),
+        height: px2dp(18),
+        borderRadius: px2dp(9),
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#E8785F',
+        marginLeft: px2dp(6)
+    },
+    add: {
+        color: '#fff'
     }
+
 })

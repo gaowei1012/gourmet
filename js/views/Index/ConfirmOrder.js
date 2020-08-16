@@ -8,7 +8,19 @@ import OrderItem from '../../components/OrderItem'
 
 class ConfirmOrder extends React.PureComponent {
     state={
-        isCheckBox: false
+        isCheckBox: false,
+        priceNum: 1,
+        checkBox: false
+    }
+    _less=()=> {
+        this.setState({
+            priceNum: this.state.priceNum - 1
+        })
+    }
+    _add=()=> {
+        this.setState({
+            priceNum: this.state.priceNum + 1
+        })
     }
     render() {
         const StatusBar = {
@@ -46,13 +58,21 @@ class ConfirmOrder extends React.PureComponent {
                 </View>
                 <View style={styles.contentOrder}>
                     <CheckBox
-                        isCheckBox={''}
-                        onCheckBox={() => {}}
+                        isCheckBox={this.state.checkBox}
+                        onCheckBox={() => {
+                            this.setState({
+                                checkBox: !this.state.checkBox
+                            })
+                        }}
                     />
                     <OrderItem
                         title={'title'}
                         desc={'desc'}
                         num={'1212'}
+                        onAdd={this._add}
+                        onLess={this._less}
+                        priceNum={this.state.priceNum}
+                        disabled={this.state.priceNum == 1 ? true : false}
                         url={'https://iph.href.lu/80x80?fg=666666&bg=cccccc'}
                     />
                 </View>
