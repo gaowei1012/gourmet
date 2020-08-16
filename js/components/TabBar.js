@@ -125,6 +125,6 @@ const styles = StyleSheet.create({
     },
     itemBox: {
         borderRadius: px2dp(20),
-        backgroundColor: 'red'
+        backgroundColor: '#E8785F'
     }
 })

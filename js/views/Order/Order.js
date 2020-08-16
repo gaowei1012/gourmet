@@ -18,14 +18,15 @@ class Order extends React.PureComponent {
     }
     render() {
         const StatusBar = {
-            backgroundColor: "#ffffff",
+            backgroundColor: "#E8785F",
             barStyle: "dark-content",
         };
         const renderTopBar = (
             <TopNavigationBar
                 title='订单'
                 statusBar={StatusBar}
-                style={{ backgroundColor: "#fff" }}
+                style={{ backgroundColor: "#E8785F" }}
+                color="#fff"
             // rightButton={_addLand}
             />
         );
@@ -49,13 +50,19 @@ class Order extends React.PureComponent {
                 {this.state.type === 1 ? <View>
                     <View style={styles.noOrderBox}>
                         <View style={styles.l} />
-                        <Text style={styles.desc}>预计送达时间12:30</Text>
+                        <View style={styles.timeBox}>
+                            <Text style={styles.desc}>预计</Text>
+                            <Text style={styles.timeDesc}>11:30</Text>
+                            <Text style={styles.desc}>送达</Text>
+                        </View>
                         <Text style={styles.desc}>由店家配送</Text>
-                        <Button
-                            title='取消订单'
+                        <TouchableOpacity
+                            activeOpacity={1}
                             style={styles.btn}
                             onPress={this._comfiom}
-                        />
+                        >
+                            <Text style={styles.comfiomText}>取消订单</Text>
+                        </TouchableOpacity>
                     </View>
                 </View> : null}
                 {this.state.type === 2 ? <View style={styles.carryBox}>
@@ -95,17 +102,21 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     menuItem: {
+        paddingTop: px2dp(8),
+        paddingBottom: px2dp(4),
         width: px2dp(375 / 2),
         alignItems: 'center',
-        backgroundColor: '#ddd',
-        paddingVertical: px2dp(8)
+        backgroundColor: '#E8785F',
+        // paddingVertical: px2dp(8)
     },
     menuText: {
-        color: '#000',
-        fontSize: px2dp(14)
+        color: '#fff',
+        fontSize: px2dp(14),
+        fontWeight: '600'
     },
     acMenuText: {
-        color: 'red'
+        color: '#fff',
+        fontWeight: '600'
     },
     line: {
         marginTop: px2dp(6),
@@ -114,7 +125,7 @@ const styles = StyleSheet.create({
         borderRadius: px2dp(4)
     },
     AcLine: {
-        backgroundColor: 'red'
+        backgroundColor: '#fff'
     },
     noOrderBox: {
         marginTop: px2dp(490),
@@ -129,14 +140,21 @@ const styles = StyleSheet.create({
         width: px2dp(40),
         height: px2dp(2),
         borderRadius: px2dp(6),
-        backgroundColor: 'red',
+        backgroundColor: '#E8785F',
         alignSelf: 'center'
     },
     btn: {
+        backgroundColor: '#E8785F',
         width: px2dp(312),
         alignSelf: 'center',
+        borderRadius: px2dp(3),
+        height: px2dp(32),
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     desc: {
+        fontSize: px2dp(16),
+        color: '#333',
         marginVertical: px2dp(5),
         paddingHorizontal: px2dp(10)
     },
@@ -151,19 +169,33 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     carryLine: {
-        height: px2dp(20),
+        height: px2dp(18),
         width: px2dp(2),
-        backgroundColor: 'red',
+        backgroundColor: '#E8785F',
         borderRadius: px2dp(6)
     },
     carryTitle: {
         fontSize: px2dp(20),
-        marginLeft: px2dp(6)
+        marginLeft: px2dp(6),
+        color: '#060606'
     },
     pingDesc: {
         fontSize: px2dp(12),
-        color: '#333',
+        color: '#BBB9B9',
         paddingHorizontal: px2dp(10),
         marginVertical: px2dp(6)
+    },
+    timeBox: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    timeDesc: {
+        color: '#E8785F',
+        fontSize: px2dp(16)
+    },
+    comfiomText: {
+        color: '#fff',
+        fontSize: px2dp(14),
+        fontWeight: '600'
     }
 })

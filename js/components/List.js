@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { Image } from 'react-native-elements'
 import { px2dp } from '../utils/px2dp'
 
-function List({ date, num, nowDate, url, text }) {
+function List({ date, num, nowDate, url, text, noRecommend, recommend }) {
     return (
         <View style={styles.list}>
             <View style={styles.topBox}>
@@ -21,18 +21,18 @@ function List({ date, num, nowDate, url, text }) {
             <View style={styles.btnBox}>
                 <TouchableOpacity
                     disabled={true}
-                    onPress={() => {}}
-                    style={styles.btn}
+                    onPress={noRecommend}
+                    style={styles.nobtn}
                     activeOpacity={1}
                 >
-                    <Text style={styles.btnText}>不推荐</Text>
+                    <Text style={styles.nobtnText}>不推荐</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.btn}
-                    onPress={() => {}}
+                    onPress={recommend}
                     activeOpacity={1}
                 >
-                    <Text style={styles.btnText}>推荐</Text>
+                    <Text style={styles.btnText}>推荐!!!</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -44,19 +44,21 @@ List.propTypes = {
     num: PropTypes.string,
     nowDate: PropTypes.string,
     url: PropTypes.string,
-    text: PropTypes.string
+    text: PropTypes.string,
+    noRecommend: PropTypes.func,
+    recommend: PropTypes.func
 }
 
 export default List
 
 const styles = StyleSheet.create({
     list: {
-        marginTop: px2dp(6),
+        marginTop: px2dp(12),
         width: px2dp(312),
         alignSelf: 'center',
         paddingHorizontal: px2dp(4),
-        paddingVertical: px2dp(6),
-        backgroundColor: '#fff',
+        paddingTop: px2dp(8),
+        backgroundColor: '#F6F7F6',
         borderRadius: px2dp(8)
     },
     topBox: {
@@ -83,17 +85,30 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
+    nobtn: {
+        width: px2dp(120),
+        height: px2dp(30),
+        borderWidth: px2dp(.5),
+        borderColor: '#C4C3C3',
+        borderRadius: px2dp(6),
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    nobtnText: {
+        color: '#C4C3C3',
+        fontSize: px2dp(14)
+    },
     btn: {
         width: px2dp(120),
         height: px2dp(30),
         borderWidth: px2dp(.5),
-        borderColor: 'red',
+        borderColor: '#E8785F',
         borderRadius: px2dp(6),
         alignItems: 'center',
         justifyContent: 'center'
     },
     btnText: {
-        color: '#333',
+        color: '#E8785F',
         fontSize: px2dp(14)
     }
 })

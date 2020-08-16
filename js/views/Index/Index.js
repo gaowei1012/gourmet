@@ -7,7 +7,8 @@ class Index extends React.PureComponent {
     state = {
         menu: [{ id: 1, name: '今日推荐' }, { id: 2, name: '附近好友' }, { id: 3, name: '来点新鲜的' }, { id: 4, name: '省点吃吧' }],
         index: 1,
-        url: 'https://iph.href.lu/80x80?fg=666666&bg=cccccc'
+        url: 'https://iph.href.lu/80x80?fg=666666&bg=cccccc',
+        checkbox: false
     }
     onChangeTab = (index, id, type) => {
         // TODO
@@ -34,7 +35,10 @@ class Index extends React.PureComponent {
         );
         const _step = (
             <View style={styles.stepBox}>
-                <Text>step</Text>
+               <View style={styles.checkBox}>
+                    <View style={styles.checkIcon}/>
+                    <Text style={styles.checkName}>name</Text>
+               </View>
             </View>
         )
         return (
@@ -64,5 +68,24 @@ const styles = StyleSheet.create({
         borderRadius: px2dp(8),
         marginHorizontal: px2dp(16),
         marginVertical: px2dp(26)
+    },
+    stepBox: {
+        width: px2dp(335),
+        alignSelf: 'center'
+    },
+    checkBox: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    checkIcon: {
+        width: px2dp(12),
+        height: px2dp(12),
+        borderRadius: px2dp(6),
+        borderWidth: px2dp(1),
+        borderColor: '#333'
+    },
+    checkName: {
+        paddingLeft: px2dp(6),
+        fontSize: px2dp(14)
     }
 })
