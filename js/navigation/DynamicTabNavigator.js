@@ -23,7 +23,7 @@ const TABS = {
             tintColor={tintColor}
             focused={focused}
             normalImage={require('../assets/tab/home.png')}
-            selectedImage={require('../assets/tab/sele_home.png')}
+            selectedImage={require('../assets/tab/home.png')}
           />
         );
       },
@@ -38,8 +38,8 @@ const TABS = {
           <TabBarItem
             tintColor={tintColor}
             focused={focused}
-            normalImage={require('../assets/tab/shop.png')}
-            selectedImage={require('../assets/tab/sele_shop.png')}
+            normalImage={require('../assets/tab/order.png')}
+            selectedImage={require('../assets/tab/order.png')}
           />
         );
       },
@@ -54,8 +54,8 @@ const TABS = {
           <TabBarItem
             tintColor={tintColor}
             focused={focused}
-            normalImage={require('../assets/tab/shop.png')}
-            selectedImage={require('../assets/tab/sele_shop.png')}
+            normalImage={require('../assets/tab/me.png')}
+            selectedImage={require('../assets/tab/me.png')}
           />
         );
       },
