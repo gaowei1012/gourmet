@@ -1,7 +1,11 @@
 import React from 'react'
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, Image } from 'react-native'
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, Image, TouchableOpacity } from 'react-native'
 import { px2dp, height } from '../../utils/px2dp'
 import TabBar from '../../components/TabBar'
+import CheckBox from '../../components/CheckBox'
+import NavigationUtil from '../../utils/NavigationUtil'
+
+import OrderCat from '../../assets/svg/order.svg'
 
 class Index extends React.PureComponent {
     state = {
@@ -12,6 +16,9 @@ class Index extends React.PureComponent {
     }
     onChangeTab = (index, id, type) => {
         // TODO
+    }
+    onCheckBox=()=> {
+        this.setState({checkbox: !this.state.checkbox})
     }
     render() {
         const _content = (
@@ -36,11 +43,34 @@ class Index extends React.PureComponent {
         const _step = (
             <View style={styles.stepBox}>
                <View style={styles.checkBox}>
-                    <View style={styles.checkIcon}/>
-                    <Text style={styles.checkName}>name</Text>
+                    <CheckBox
+                        onCheckBox={this.onCheckBox}
+                        isCheckBox={this.state.checkbox}
+                    />
+                    <Text style={styles.name}>西红柿炒鸡蛋</Text>
+               </View>
+               <View style={styles.stepCont}>
+                   <Text>今日已有300人下单了</Text>
+                   <TouchableOpacity
+                        style={styles.stepBtn}
+                   >
+                       <Text style={styles.btnText}>￥12.00 来一份</Text>
+                   </TouchableOpacity>
                </View>
             </View>
-        )
+        );
+        const order = (
+            <TouchableOpacity
+                onPress={() => {
+                    NavigationUtil.goPage({}, 'ConfirmOrder')
+                }}
+                style={styles.orderBox}>
+                <OrderCat width='24' height='24'/>
+                <View style={styles.orderNum}>
+                    <Text>1</Text>
+                </View>
+            </TouchableOpacity>
+        );
         return (
             <SafeAreaView style={styles.landContainer}>
                 <TabBar
@@ -51,6 +81,7 @@ class Index extends React.PureComponent {
                 />
                 {_content}
                 {_step}
+                {order}
             </SafeAreaView>
         )
     }
@@ -87,5 +118,53 @@ const styles = StyleSheet.create({
     checkName: {
         paddingLeft: px2dp(6),
         fontSize: px2dp(14)
+    },
+    name: {
+        marginLeft: px2dp(8),
+        color: '#000',
+        fontSize: px2dp(14)
+    },
+    orderBox: {
+        position: 'absolute',
+        bottom: px2dp(0),
+        right: 0,
+        width: px2dp(60),
+        height: px2dp(36),
+        backgroundColor: '#E8785F',
+        borderTopLeftRadius: px2dp(36/2),
+        borderBottomLeftRadius: px2dp(36/2),
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row'
+    },
+    orderNum: {
+        width: px2dp(12),
+        height: px2dp(12),
+        borderRadius: px2dp(6),
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        top: px2dp(2),
+        right: px2dp(10)
+    },
+    stepCont: {
+        marginVertical: px2dp(100),
+        alignItems: 'center'
+    },
+    stepBtn: {
+        width: px2dp(120),
+        height: px2dp(36),
+        marginTop: px2dp(10),
+        alignItems: 'center',
+        alignSelf: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#E8785F',
+        borderRadius: px2dp(36/2)
+    },
+    btnText: {
+        color: '#fff',
+        fontSize: px2dp(14),
+        fontWeight: '600'
     }
 })

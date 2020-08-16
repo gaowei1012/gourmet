@@ -15,6 +15,7 @@ import Index from '../views/Index/Index';
 import Order from '../views/Order/Order';
 import Personal from '../views/Personal/Personal';
 import Login from '../views/Personal/Login';
+import ConfirmOrder from '../views/Index/ConfirmOrder'
 
 
 
@@ -56,6 +57,12 @@ const MainNavigator = createStackNavigator({
     },
     Login: {
         screen: Login,
+        navigationOptions: {
+            header: null
+        }
+    },
+    ConfirmOrder: {
+        screen: ConfirmOrder,
         navigationOptions: {
             header: null
         }
