@@ -11,7 +11,8 @@ export default class TabBar extends React.Component {
     constructor(porps) {
         super(porps)
         this.state = {
-            index: this.props.index
+            index: this.props.index,
+            type: null
         }
         this.scroll = null;
         this.laout_list = [];
@@ -30,7 +31,7 @@ export default class TabBar extends React.Component {
                         key={item.id}
                         style={styles.itemBtn}
                         activeOpacity={1}
-                        onPress={() => this.setInex(index)}
+                        onPress={() => this.setInex(index, item.type)}
                         onLayout={e => this.setLout(e.nativeEvent.layout, index)}
                     >
                         <View style={[this.state.index === index ? styles.itemBox : null]}>
@@ -66,8 +67,8 @@ export default class TabBar extends React.Component {
         this.scrollW += layout.width;
     }
 
-    setInex(index, bl = true) {
-        this.setState({ index });
+    setInex(index, type, bl = true) {
+        this.setState({ index, type });
         if (!this.scroll) return;
         let layout = this.laout_list[index];
         let rx = width / 2;
@@ -75,7 +76,7 @@ export default class TabBar extends React.Component {
         if (sx < 0) sx = 0;
         sx < this.scrollW - width && this.scroll.scrollTo({ x: sx, animated: bl });
         sx >= this.scrollW - width && this.scroll.scrollToEnd({ animated: bl });
-        this.props.onChange && this.props.onChange(index);
+        this.props.onChange && this.props.onChange(index, type);
         this.shouldUpdate = true;
     }
 }

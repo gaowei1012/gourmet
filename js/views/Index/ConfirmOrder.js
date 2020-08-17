@@ -1,10 +1,13 @@
 import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, TextInput } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, TextInput, Platform } from 'react-native'
 import { px2dp, width } from '../../utils/px2dp'
 import TopNavigationBar from '../../common/TopNavigationBar'
 import { GoBack } from '../../utils/GoBack'
 import CheckBox from '../../components/CheckBox'
 import OrderItem from '../../components/OrderItem'
+import actions from './redux/actions'
+import {connect} from 'react-redux'
+import constant from '../../expand/api'
 
 class ConfirmOrder extends React.PureComponent {
     state={
@@ -114,7 +117,8 @@ class ConfirmOrder extends React.PureComponent {
             </View>
         )
         return (
-            <SafeAreaView style={styles.container}>
+            <SafeAreaView
+                style={styles.container}>
                 {renderTop}
                 {_header}
                 {_content}
@@ -125,17 +129,20 @@ class ConfirmOrder extends React.PureComponent {
     }
 }
 
-export default ConfirmOrder
+export default connect(({}) => ({}), dispatch => ({
+
+}))(ConfirmOrder)
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F6F7F6'
+        backgroundColor: '#F6F7F6',
+        // backgroundColor: '#E8785F'
     },
     headerBox: {
         width: width,
         height: px2dp(130),
-        backgroundColor: '#E8785F'
+        backgroundColor: '#E8785F',
     },
     addressBox: {
         width: px2dp(345),

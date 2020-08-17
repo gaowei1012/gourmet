@@ -1,62 +1,90 @@
 import React from 'react'
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, Image, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, SafeAreaView, Image, TouchableOpacity, ViewBase } from 'react-native'
 import { px2dp, height } from '../../utils/px2dp'
 import TabBar from '../../components/TabBar'
 import CheckBox from '../../components/CheckBox'
 import NavigationUtil from '../../utils/NavigationUtil'
+import actions from './redux/actions'
+import { connect } from 'react-redux'
+import constant from '../../expand/api'
+import { Toast } from '../../utils/Toast'
 
 import OrderCat from '../../assets/svg/order.svg'
 
+const { shopType } = constant
+
 class Index extends React.PureComponent {
     state = {
-        menu: [{ id: 1, name: '今日推荐' }, { id: 2, name: '附近好友' }, { id: 3, name: '来点新鲜的' }, { id: 4, name: '省点吃吧' }],
+        menu: [{ id: 1, name: '今日推荐', type: 1 }, { id: 2, name: '附近好友', type: 2 }, { id: 3, name: '来点新鲜的', type: 3 }, { id: 4, name: '省点吃吧', type: 4 }, { id: 5, name: '欢迎再来', type: 5 }],
         index: 1,
         url: 'https://iph.href.lu/80x80?fg=666666&bg=cccccc',
         checkbox: false
     }
-    onChangeTab = (index, id, type) => {
-        // TODO
+
+    componentDidMount() {
+        const { getShopType } = this.props
+        const data = {
+            "type": 1
+        }
+        getShopType(shopType, 'POST', data)
     }
-    onCheckBox=()=> {
-        this.setState({checkbox: !this.state.checkbox})
+
+    onChangeTab = (index, type) => {
+        const { getShopType } = this.props
+        const data = {
+            "type": type
+        }
+        getShopType(shopType, 'POST', data)
     }
+    onCheckBox = () => {
+        this.setState({ checkbox: !this.state.checkbox })
+    }
+    // 添加购物车
+    _addCat = () => {
+
+    }
+
+    _content = () => {
+        const shop = this.props.shop.item
+        console.log('shop', shop)
+        if (!shop) {
+            return <View />
+        }
+        return <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+        >
+            {shop.map(s => (
+                <Image
+                    key={s.id}
+                    style={styles.scrollItem}
+                    source={{ uri: s.shop_url }}
+                />
+            ))}
+        </ScrollView>
+    }
+
     render() {
-        const _content = (
-            <ScrollView
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-            >
-                <Image
-                    style={styles.scrollItem}
-                    source={{uri: this.state.url}}
-                />
-                <Image
-                    style={styles.scrollItem}
-                    source={{uri: this.state.url}}
-                />
-                <Image
-                    style={styles.scrollItem}
-                    source={{uri: this.state.url}}
-                />
-            </ScrollView>
-        );
+
         const _step = (
             <View style={styles.stepBox}>
-               <View style={styles.checkBox}>
+                <View style={styles.checkBox}>
                     <CheckBox
                         onCheckBox={this.onCheckBox}
                         isCheckBox={this.state.checkbox}
                     />
                     <Text style={styles.name}>西红柿炒鸡蛋</Text>
-               </View>
-               <View style={styles.stepCont}>
-                   <Text>今日已有300人下单了</Text>
-                   <TouchableOpacity
+                </View>
+                <View style={styles.stepCont}>
+                    <Text>今日已有300人下单了</Text>
+                    <TouchableOpacity
                         style={styles.stepBtn}
-                   >
-                       <Text style={styles.btnText}>￥12.00 来一份</Text>
-                   </TouchableOpacity>
-               </View>
+                        activeOpacity={1}
+                        onPress={this._addCat}
+                    >
+                        <Text style={styles.btnText}>￥12.00 来一份</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         );
         const order = (
@@ -65,7 +93,7 @@ class Index extends React.PureComponent {
                     NavigationUtil.goPage({}, 'ConfirmOrder')
                 }}
                 style={styles.orderBox}>
-                <OrderCat width='24' height='24'/>
+                <OrderCat width='24' height='24' />
                 <View style={styles.orderNum}>
                     <Text>1</Text>
                 </View>
@@ -77,9 +105,9 @@ class Index extends React.PureComponent {
                     ref={e => this.tabs = e}
                     index={this.state.index}
                     data={this.state.menu}
-                    onChange={(index, id, type) => this.onChangeTab(index, id, type)}
+                    onChange={(index, type) => this.onChangeTab(index, type)}
                 />
-                {_content}
+                {this._content()}
                 {_step}
                 {order}
             </SafeAreaView>
@@ -87,18 +115,23 @@ class Index extends React.PureComponent {
     }
 }
 
-export default Index
+export default connect(({ shop }) => ({ shop }), dispatch => ({
+    getShopType(url, method, data) {
+        dispatch(actions.getShopType(url, method, data))
+    }
+}))(Index)
 
 const styles = StyleSheet.create({
     indexContainer: {
         flex: 1
     },
     scrollItem: {
-        width: px2dp(300),
+        width: px2dp(335),
         height: px2dp(300),
         borderRadius: px2dp(8),
         marginHorizontal: px2dp(16),
-        marginVertical: px2dp(26)
+        marginVertical: px2dp(26),
+        alignSelf: 'center'
     },
     stepBox: {
         width: px2dp(335),
@@ -131,8 +164,8 @@ const styles = StyleSheet.create({
         width: px2dp(60),
         height: px2dp(36),
         backgroundColor: '#E8785F',
-        borderTopLeftRadius: px2dp(36/2),
-        borderBottomLeftRadius: px2dp(36/2),
+        borderTopLeftRadius: px2dp(36 / 2),
+        borderBottomLeftRadius: px2dp(36 / 2),
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row'
@@ -160,7 +193,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         justifyContent: 'center',
         backgroundColor: '#E8785F',
-        borderRadius: px2dp(36/2)
+        borderRadius: px2dp(36 / 2)
     },
     btnText: {
         color: '#fff',
