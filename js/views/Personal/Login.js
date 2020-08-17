@@ -6,6 +6,8 @@ import TopNavigationBar from '../../common/TopNavigationBar'
 import { connect } from 'react-redux'
 import actions from './redux/action'
 import constant from '../../expand/api'
+import { Loading } from '../../utils/Loading'
+import NavigationUtil from '../../utils/NavigationUtil'
 
 const { register, login } = constant
 
@@ -62,6 +64,15 @@ class Login extends React.PureComponent {
             "password": this.state.password
         }
         getLogin(login, 'POST', data)
+        Loading.show()
+        setTimeout(() => {
+            let login = this.props.login.item
+            if (login.code == 1) {
+                // 登录成功
+                Loading.hidden()
+                NavigationUtil.goBack(this.props.navigation)
+            }
+        }, 800)
     }
     render() {
         const StatusBar = {
@@ -122,15 +133,15 @@ class Login extends React.PureComponent {
                         activeOpacity={1}
                         onPress={this._switch}
                     >
-                        <Text>注册</Text>
+                        <Text style={{color: '#333'}}>注册</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                         activeOpacity={1}
                         onPress={this.handleSubmit}
                         style={styles.password}
                     >
                         <Text style={styles.passwordText}>忘记密码？</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View> : null}
             </>
         );

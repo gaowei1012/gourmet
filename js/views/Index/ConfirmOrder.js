@@ -8,6 +8,7 @@ import OrderItem from '../../components/OrderItem'
 import actions from './redux/actions'
 import { connect } from 'react-redux'
 import constant from '../../expand/api'
+import { Loading } from '../../utils/Loading'
 
 const { address } = constant
 
@@ -37,22 +38,23 @@ class ConfirmOrder extends React.PureComponent {
     _header = () => {
         const address = this.props.address.item
         if (!address) {
-            return <View />
-        }
-        return (
-            <>
-                {address.map(a => (
-                    <View style={styles.headerBox}>
-                        <View style={styles.addressBox}>
-                            <Text style={styles.addressTitle}>订单配送至</Text>
-                            <Text style={styles.address}>{a.address}</Text>
-                            <Text style={styles.tel}>{a.tel}</Text>
+            return Loading.show()
+        } else {
+            Loading.hidden()
+            return (
+                <>
+                    {address.map(a => (
+                        <View style={styles.headerBox}>
+                            <View style={styles.addressBox}>
+                                <Text style={styles.addressTitle}>订单配送至</Text>
+                                <Text style={styles.address}>{a.address}</Text>
+                                <Text style={styles.tel}>{a.tel}</Text>
+                            </View>
                         </View>
-                    </View>
-                ))}
-            </>
-
-        )
+                    ))}
+                </>
+            ) 
+        }
     }
     render() {
         const StatusBar = {

@@ -4,6 +4,7 @@ import TopNavigationBar from '../../common/TopNavigationBar'
 import { px2dp, width } from '../../utils/px2dp'
 import NavigationUtil from '../../utils/NavigationUtil'
 import RecommenItem from './components/recommenItem'
+import { Loading } from '../../utils/Loading'
 
 import constant from '../../expand/api'
 import actions from './redux/action'
@@ -28,19 +29,21 @@ class Personal extends React.PureComponent {
     _list = () => {
         const recommen = this.props.recommen.item
         if (!recommen) {
-            return <View />
+            return Loading.show()
+        } else {
+            Loading.hidden()
+            return <ScrollView
+                showsVerticalScrollIndicator={false}
+            >
+                {recommen.map(r => (
+                    <RecommenItem
+                        key={r.id}
+                        url={r.shop_url}
+                        content={r.shop_name}
+                    />
+                ))}
+            </ScrollView>
         }
-        return <ScrollView
-            showsVerticalScrollIndicator={false}
-        >
-            {recommen.map(r => (
-                <RecommenItem
-                    key={r.id}
-                    url={r.shop_url}
-                    content={r.shop_name}
-                />
-            ))}
-        </ScrollView>
     }
     render() {
         const StatusBar = {

@@ -8,6 +8,7 @@ import actions from './redux/actions'
 import { connect } from 'react-redux'
 import constant from '../../expand/api'
 import { Toast } from '../../utils/Toast'
+import { Loading } from '../../utils/Loading'
 
 import OrderCat from '../../assets/svg/order.svg'
 
@@ -46,22 +47,29 @@ class Index extends React.PureComponent {
 
     _content = () => {
         const shop = this.props.shop.item
-        console.log('shop', shop)
         if (!shop) {
-            return <View />
+            return Loading.show()
+        } else {
+            Loading.hidden()
+            return (
+                <ScrollView
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                >
+                    {shop.map(s => (
+                        <Image
+                            key={s.id}
+                            style={styles.scrollItem}
+                            source={{ uri: s.shop_url }}
+                        />
+                    ))}
+                </ScrollView>
+            )
         }
-        return <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-        >
-            {shop.map(s => (
-                <Image
-                    key={s.id}
-                    style={styles.scrollItem}
-                    source={{ uri: s.shop_url }}
-                />
-            ))}
-        </ScrollView>
+    }
+
+    _goToPage=()=> {
+        NavigationUtil.goPage({}, 'ConfirmOrder')
     }
 
     render() {
@@ -87,11 +95,10 @@ class Index extends React.PureComponent {
                 </View>
             </View>
         );
+        
         const order = (
             <TouchableOpacity
-                onPress={() => {
-                    NavigationUtil.goPage({}, 'ConfirmOrder')
-                }}
+                onPress={this._goToPage}
                 style={styles.orderBox}>
                 <OrderCat width='24' height='24' />
                 <View style={styles.orderNum}>
