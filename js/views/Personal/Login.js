@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import actions from './redux/action'
 import constant from '../../expand/api'
 
-const { register } = constant
+const { register, login } = constant
 
 class Login extends React.PureComponent {
     state = {
@@ -52,6 +52,16 @@ class Login extends React.PureComponent {
         this.setState({
             register: false
         })
+    }
+
+    // 登录
+    _submit = () => {
+        const { getLogin } = this.props
+        let data = {
+            "username": this.state.account,
+            "password": this.state.password
+        }
+        getLogin(login, 'POST', data)
     }
     render() {
         const StatusBar = {
@@ -155,11 +165,14 @@ class Login extends React.PureComponent {
     }
 }
 
-export default connect(({ register }) => ({
-    register
+export default connect(({ register, login }) => ({
+    register, login
 }), dispatch => ({
     getRegister(url, method, data) {
         dispatch(actions.getRegister(url, method, data))
+    },
+    getLogin(url, method, data) {
+        dispatch(actions.getLogin(url, method, data))
     }
 }))(Login)
 
