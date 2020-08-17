@@ -33,7 +33,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: '#F6F7F6',
-        paddingHorizontal: px2dp(8)
+        paddingHorizontal: px2dp(8),
+        marginBottom: px2dp(6)
     },
     image: {
         width: px2dp(60),

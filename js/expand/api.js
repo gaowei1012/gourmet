@@ -7,7 +7,8 @@ const constant = {
     addOnesOrder: '/api/order/addOrderOnes',
     orderById: '/api/order/getOrderById',
     delRrderById: '/api/order/deleteOrderById',
-    address: '/api/address/getAddress'
+    address: '/api/address/getAddress',
+    recommen: '/api/recommen/findRecommen',
 }
 
 export default constant

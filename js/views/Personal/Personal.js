@@ -1,19 +1,46 @@
 import React from 'react'
-import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, Image, ScrollView} from 'react-native'
+import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native'
 import TopNavigationBar from '../../common/TopNavigationBar'
 import { px2dp, width } from '../../utils/px2dp'
 import NavigationUtil from '../../utils/NavigationUtil'
 import RecommenItem from './components/recommenItem'
 
+import constant from '../../expand/api'
+import actions from './redux/action'
+import { connect } from 'react-redux'
+
 // svg
 import HanBao from '../../assets/svg/hanbao.svg'
 
-export default class Personal extends React.PureComponent {
+const { recommen } = constant
+
+class Personal extends React.PureComponent {
     state = {
         url: 'https://iph.href.lu/80x80?text=%E5%A4%B4%E5%83%8F&fg=ffffff&bg=ead1dc'
     }
+    componentDidMount() {
+        const { getRecommen } = this.props
+        getRecommen(recommen, 'POST')
+    }
     handleLogin = () => {
         NavigationUtil.goPage({}, 'Login')
+    }
+    _list = () => {
+        const recommen = this.props.recommen.item
+        if (!recommen) {
+            return <View />
+        }
+        return <ScrollView
+            showsVerticalScrollIndicator={false}
+        >
+            {recommen.map(r => (
+                <RecommenItem
+                    key={r.id}
+                    url={r.shop_url}
+                    content={r.shop_name}
+                />
+            ))}
+        </ScrollView>
     }
     render() {
         const StatusBar = {
@@ -37,25 +64,18 @@ export default class Personal extends React.PureComponent {
                     onPress={this.handleLogin}
                     activeOpacity={1}
                 >
-                    <Image style={styles.avatarBox} source={{uri: this.state.url}}/>
+                    <Image style={styles.avatarBox} source={{ uri: this.state.url }} />
                 </TouchableOpacity>
                 <View style={styles.topAvatarDesc}>
                     <View style={styles.topTitleBox}>
                         <Text style={styles.title}>Hi，风湿老年人</Text>
                         <Text style={styles.lv}>L1 单层汉堡</Text>
                     </View>
-                    <HanBao width="28" height="28"/>
+                    <HanBao width="28" height="28" />
                 </View>
             </View>
         );
-        const _list = (
-            <ScrollView>
-                <RecommenItem
-                    url={'https://iph.href.lu/80x80?fg=666666&bg=cccccc'}
-                    content={'我是美食，我是美食，我是美食,我是美食，我是美食，我是美食'}
-                />
-            </ScrollView>
-        )
+
         const _content = (
             <View style={styles.contentBox}>
                 <View style={styles.titleBox}>
@@ -70,10 +90,16 @@ export default class Personal extends React.PureComponent {
             {_topHeader}
             {_topBox}
             {_content}
-            {_list}
+            {this._list()}
         </SafeAreaView>
     }
 }
+
+export default connect(({ recommen }) => ({ recommen }), dispatch => ({
+    getRecommen(url, method) {
+        dispatch(actions.getRecommen(url, method))
+    }
+}))(Personal)
 
 const styles = StyleSheet.create({
     personalContainer: {
@@ -93,10 +119,10 @@ const styles = StyleSheet.create({
         height: px2dp(120),
         borderRadius: px2dp(10),
         shadowColor: '#C5C5C5',  //设置阴影色
-        shadowOffset:{width:0,height:0},  //设置阴影偏移,该值会设置整个阴影的偏移，width可以看做x,height可以看做y,x向右为正，y向下为正
+        shadowOffset: { width: 0, height: 0 },  //设置阴影偏移,该值会设置整个阴影的偏移，width可以看做x,height可以看做y,x向右为正，y向下为正
         shadowOpacity: 1,
         shadowRadius: 1.5,
-        elevation:1.5, // 适配安卓
+        elevation: 1.5, // 适配安卓
     },
     avatarBox: {
         width: px2dp(80),
