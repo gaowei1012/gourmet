@@ -6,24 +6,53 @@ import { GoBack } from '../../utils/GoBack'
 import CheckBox from '../../components/CheckBox'
 import OrderItem from '../../components/OrderItem'
 import actions from './redux/actions'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import constant from '../../expand/api'
 
+const { address } = constant
+
 class ConfirmOrder extends React.PureComponent {
-    state={
+    state = {
         isCheckBox: false,
         priceNum: 1,
         checkBox: false
     }
-    _less=()=> {
+    componentDidMount() {
+        const { getAddress } = this.props
+        const data = {
+            "username": '执念'
+        }
+        getAddress(address, 'POST', data)
+    }
+    _less = () => {
         this.setState({
             priceNum: this.state.priceNum - 1
         })
     }
-    _add=()=> {
+    _add = () => {
         this.setState({
             priceNum: this.state.priceNum + 1
         })
+    }
+    _header = () => {
+        const address = this.props.address.item
+        if (!address) {
+            return <View />
+        }
+        return (
+            <>
+                {address.map(a => (
+                    <View style={styles.headerBox}>
+                        <View style={styles.addressBox}>
+                            <Text style={styles.addressTitle}>订单配送至</Text>
+                            <Text style={styles.address}>{a.address}</Text>
+                            <Text style={styles.tel}>{a.tel}</Text>
+                        </View>
+                    </View>
+                ))}
+            </>
+
+        )
     }
     render() {
         const StatusBar = {
@@ -39,22 +68,14 @@ class ConfirmOrder extends React.PureComponent {
                 leftButton={GoBack(this.props)}
             />
         );
-        const _header = (
-            <View style={styles.headerBox}>
-                <View style={styles.addressBox}>
-                    <Text style={styles.addressTitle}>订单配送至</Text>
-                    <Text style={styles.address}>address</Text>
-                    <Text style={styles.tel}>1214515</Text>
-                </View>
-            </View>
-        );
+
         const _content = (
             <View style={styles.contentBox}>
                 <View style={styles.selectBox}>
                     <CheckBox
                         isCheckBox={this.state.isCheckBox}
                         onCheckBox={() => {
-                            this.setState({isCheckBox: !this.state.isCheckBox})
+                            this.setState({ isCheckBox: !this.state.isCheckBox })
                         }}
                     />
                     <Text style={styles.selectText}>全选</Text>
@@ -120,7 +141,7 @@ class ConfirmOrder extends React.PureComponent {
             <SafeAreaView
                 style={styles.container}>
                 {renderTop}
-                {_header}
+                {this._header()}
                 {_content}
                 {peisong}
                 {_fotter}
@@ -129,8 +150,10 @@ class ConfirmOrder extends React.PureComponent {
     }
 }
 
-export default connect(({}) => ({}), dispatch => ({
-
+export default connect(({ address }) => ({ address }), dispatch => ({
+    getAddress(url, method, data) {
+        dispatch(actions.getAddress(url, method, data))
+    }
 }))(ConfirmOrder)
 
 const styles = StyleSheet.create({
@@ -180,7 +203,7 @@ const styles = StyleSheet.create({
         // elevation: 1, // 适配安卓
     },
     selectBox: {
-        flexDirection:'row',
+        flexDirection: 'row',
         paddingHorizontal: px2dp(10),
         paddingVertical: px2dp(12),
         alignItems: 'center',
@@ -206,7 +229,7 @@ const styles = StyleSheet.create({
     },
     leftBox: {
         flexDirection: 'row',
-        alignItems:'center',
+        alignItems: 'center',
         marginLeft: px2dp(30)
     },
     you: {
@@ -259,7 +282,7 @@ const styles = StyleSheet.create({
     },
     timeTitle: {
         color: '#000',
-        fontSize:px2dp(14)
+        fontSize: px2dp(14)
     },
     time: {
         color: '#E8785F',
