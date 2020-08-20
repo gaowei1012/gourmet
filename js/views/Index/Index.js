@@ -19,7 +19,8 @@ class Index extends React.PureComponent {
         index: 1,
         url: 'https://iph.href.lu/80x80?fg=666666&bg=cccccc',
         checkbox: false,
-        orderNum: 0
+        orderNum: 0,
+        price: null,
     }
 
     componentDidMount() {
@@ -70,6 +71,8 @@ class Index extends React.PureComponent {
 
     _goToPage=()=> {
         let { orderNum } = this.state
+        let data = {
+        }
         Loading.show('加载中...')
         setTimeout(() => {
             Loading.hidden()
