@@ -9,6 +9,7 @@ import actions from './redux/actions'
 import { connect } from 'react-redux'
 import constant from '../../expand/api'
 import { Loading } from '../../utils/Loading'
+import { Toast } from '../../utils/Toast'
 
 const { address } = constant
 
@@ -16,19 +17,38 @@ class ConfirmOrder extends React.PureComponent {
     state = {
         isCheckBox: false,
         priceNum: 1,
-        checkBox: false
+        checkBox: false,
+        desc: null, // 订单备注
+        deliveryTime: '12:30'
     }
     componentDidMount() {
+        let { orderNum } = this.props.navigation.state.params
+        // 父组件传过来的值
+        this.setState({priceNum: orderNum})
+        this.getAddress()
+    }
+
+    // 获取订单地址
+    getAddress() {
         const { getAddress } = this.props
         const data = {
             "username": '执念'
         }
         getAddress(address, 'POST', data)
     }
+
+    // 订单备注
+    orderBeiZhu = (desc) => {
+        this.setState({ desc })
+    }
+
     _less = () => {
         this.setState({
             priceNum: this.state.priceNum - 1
         })
+        // if (this.state.priceNum == 1) {
+        //     Toast.showToast('最少选择一件餐食')
+        // }
     }
     _add = () => {
         this.setState({
@@ -38,7 +58,7 @@ class ConfirmOrder extends React.PureComponent {
     _header = () => {
         const address = this.props.address.item
         if (!address) {
-            return Loading.show()
+            return Loading.show('获取中...')
         } else {
             Loading.hidden()
             return (
@@ -53,10 +73,11 @@ class ConfirmOrder extends React.PureComponent {
                         </View>
                     ))}
                 </>
-            ) 
+            )
         }
     }
     render() {
+        let { deliveryTime } = this.state
         const StatusBar = {
             backgroundColor: "#ffffff",
             barStyle: "dark-content",
@@ -108,16 +129,17 @@ class ConfirmOrder extends React.PureComponent {
             <View style={styles.pingSongBox}>
                 <View style={styles.songDa}>
                     <Text style={styles.timeTitle}>送达时间</Text>
-                    <Text style={styles.time}>11:30</Text>
+                    <Text style={styles.time}>{deliveryTime}</Text>
                 </View>
                 <View style={styles.songDa}>
                     <Text style={styles.timeTitle}>配送服务</Text>
-                    <Text style={styles.notime}>11:30</Text>
+                    <Text style={styles.notime}>蜂鸟配送</Text>
                 </View>
                 <View style={styles.songDa}>
-                    <Text style={styles.timeTitle}>订单配送</Text>
+                    <Text style={styles.timeTitle}>订单备注</Text>
                     <TextInput
                         placeholder='这里可以输入内容'
+                        onChangeText={this.orderBeiZhu}
                     />
                 </View>
             </View>

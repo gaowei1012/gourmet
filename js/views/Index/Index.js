@@ -7,7 +7,6 @@ import NavigationUtil from '../../utils/NavigationUtil'
 import actions from './redux/actions'
 import { connect } from 'react-redux'
 import constant from '../../expand/api'
-import { Toast } from '../../utils/Toast'
 import { Loading } from '../../utils/Loading'
 
 import OrderCat from '../../assets/svg/order.svg'
