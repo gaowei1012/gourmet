@@ -19,7 +19,8 @@ class Index extends React.PureComponent {
         menu: [{ id: 1, name: '今日推荐', type: 1 }, { id: 2, name: '附近好友', type: 2 }, { id: 3, name: '来点新鲜的', type: 3 }, { id: 4, name: '省点吃吧', type: 4 }, { id: 5, name: '欢迎再来', type: 5 }],
         index: 1,
         url: 'https://iph.href.lu/80x80?fg=666666&bg=cccccc',
-        checkbox: false
+        checkbox: false,
+        orderNum: 0
     }
 
     componentDidMount() {
@@ -42,13 +43,13 @@ class Index extends React.PureComponent {
     }
     // 添加购物车
     _addCat = () => {
-
+        this.setState({orderNum: this.state.orderNum + 1})
     }
 
     _content = () => {
         const shop = this.props.shop.item
         if (!shop) {
-            return Loading.show()
+            return Loading.show('推荐中...')
         } else {
             Loading.hidden()
             return (
@@ -69,11 +70,16 @@ class Index extends React.PureComponent {
     }
 
     _goToPage=()=> {
-        NavigationUtil.goPage({}, 'ConfirmOrder')
+        let { orderNum } = this.state
+        Loading.show('加载中...')
+        setTimeout(() => {
+            Loading.hidden()
+            NavigationUtil.goPage({orderNum}, 'ConfirmOrder')
+        }, 200)
     }
 
     render() {
-
+        let { orderNum } = this.state
         const _step = (
             <View style={styles.stepBox}>
                 <View style={styles.checkBox}>
@@ -101,9 +107,9 @@ class Index extends React.PureComponent {
                 onPress={this._goToPage}
                 style={styles.orderBox}>
                 <OrderCat width='24' height='24' />
-                <View style={styles.orderNum}>
-                    <Text>1</Text>
-                </View>
+                {orderNum === 0 ? null : <View style={styles.orderNum}>
+                    <Text style={styles.orderText}>{orderNum}</Text>
+                </View>}
             </TouchableOpacity>
         );
         return (
@@ -206,5 +212,8 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: px2dp(14),
         fontWeight: '600'
+    },
+    orderText: {
+        color: '#333'
     }
 })
