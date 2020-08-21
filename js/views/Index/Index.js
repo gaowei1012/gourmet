@@ -2,7 +2,6 @@ import React from 'react'
 import { View, Text, StyleSheet, FlatList, SafeAreaView, Image, TouchableOpacity, ScrollView, Alert } from 'react-native'
 import { px2dp, height } from '../../utils/px2dp'
 import TabBar from '../../components/TabBar'
-import CheckBox from '../../components/CheckBox'
 import NavigationUtil from '../../utils/NavigationUtil'
 import actions from './redux/actions'
 import { connect } from 'react-redux'
@@ -17,19 +16,16 @@ const { shopType } = constant
 class Index extends React.PureComponent {
     state = {
         menu: [{ id: 1, name: '今日推荐', type: 1 }, { id: 2, name: '附近好友', type: 2 }, { id: 3, name: '来点新鲜的', type: 3 }, { id: 4, name: '省点吃吧', type: 4 }, { id: 5, name: '欢迎再来', type: 5 }],
-        index: 1,
+        index: 0,
         url: 'https://iph.href.lu/80x80?fg=666666&bg=cccccc',
         checkbox: false,
         orderNum: 0,
         price: null,
+        catArr: [], // 购物车数据
     }
 
     componentDidMount() {
-        const { getShopType } = this.props
-        const data = {
-            "type": 1
-        }
-        getShopType(shopType, 'POST', data)
+        this.onChangeTab(null, 1)
     }
 
     onChangeTab = (index, type) => {
@@ -43,15 +39,18 @@ class Index extends React.PureComponent {
         this.setState({ checkbox: !this.state.checkbox })
     }
     // 添加购物车
-    handleAddCat = (id) => {
+    handleAddCat = (shop_name, shop_url, shop_detail, price, id) => {
+        let catArr = []
+        let obj = {
+            "shop_name": shop_name,
+            "shop_url": shop_url,
+            "shop_detail": shop_detail,
+            "price": price,
+            "id": id
+        }
+        catArr.push(obj)
+        console.log('new arr', catArr)
         this.setState({ orderNum: this.state.orderNum + 1 })
-    }
-
-    // 商品列表
-    _renderItem(data) {
-        console.log(data)
-        let shop = data.item
-        
     }
 
     // 内容
@@ -62,35 +61,39 @@ class Index extends React.PureComponent {
         } else {
             Loading.hidden()
             return (
-                <ScrollView>
-                    {shop.map(s => {
-                        return <View key={s.id} style={styles.shopWrap}>
-                        <View style={styles.shopItemBox}>
-                            <Image
-                                source={{ uri: s.shop_url }}
-                                style={styles.shopImage}
-                            />
-                            <View style={styles.contentBox}>
-                                <View style={styles.shopConTopBox}>
-                                    <Text style={styles.shop_name}>{s.shop_name}</Text>
-                                    <Text style={styles.shop_detail}>{s.shop_detail}</Text>
+                <View style={styles.shopWrap}>
+
+                    <ScrollView>
+                        {shop.map(s => {
+                            return <>
+                                <View key={s.id} style={styles.shopItemBox}>
+                                    <Image
+                                        source={{ uri: s.shop_url }}
+                                        style={styles.shopImage}
+                                    />
+                                    <View style={styles.contentBox}>
+                                        <View style={styles.shopConTopBox}>
+                                            <Text style={styles.shop_name}>{s.shop_name}</Text>
+                                            <Text style={styles.shop_detail}>{s.shop_detail}</Text>
+                                        </View>
+                                        <View style={styles.shopConBtnBox}>
+                                            <Text style={styles.price}>￥{s.price}</Text>
+                                            <TouchableOpacity
+                                                activeOpacity={1}
+                                                onPress={() => this.handleAddCat(s.shop_name, s.shop_url, s.shop_detail, s.price, s.id)}
+                                                style={styles.catBox}
+                                            >
+                                                <Cat width='18' height='18' />
+                                                {/* <Text>加入购物车</Text> */}
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
                                 </View>
-                                <View style={styles.shopConBtnBox}>
-                                    <Text style={styles.price}>￥{s.price}</Text>
-                                    <TouchableOpacity
-                                        activeOpacity={1}
-                                        onPress={() => this.handleAddCat(s.id)}
-                                        style={styles.catBox}
-                                    >
-                                        <Cat width='18' height='18' />
-                                        {/* <Text>加入购物车</Text> */}
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-                    })}
-                </ScrollView>
+                            </>
+                        })}
+                    </ScrollView>
+                </View>
+
             )
         }
     }
@@ -137,6 +140,9 @@ class Index extends React.PureComponent {
 export default connect(({ shop }) => ({ shop }), dispatch => ({
     getShopType(url, method, data) {
         dispatch(actions.getShopType(url, method, data))
+    },
+    addOrderCat(url, method, data) {
+        dispatch(actions.addOrderCat(url, method, data))
     }
 }))(Index)
 
@@ -178,7 +184,7 @@ const styles = StyleSheet.create({
     },
     orderBox: {
         position: 'absolute',
-        bottom: px2dp(60),
+        bottom: px2dp(140),
         right: 0,
         width: px2dp(60),
         height: px2dp(36),
@@ -225,13 +231,14 @@ const styles = StyleSheet.create({
 
     // 内容列表
     shopWrap: {
-        height: height,
+        height: height - px2dp(60),
+        marginTop: px2dp(10)
     },
     shopItemBox: {
-        marginVertical: px2dp(15),
+        marginTop: px2dp(8),
         width: px2dp(340),
         alignSelf: 'center',
-        // padding: px2dp(8),
+        padding: px2dp(8),
         paddingVertical: px2dp(10),
         paddingHorizontal: px2dp(6),
         borderRadius: px2dp(3),
