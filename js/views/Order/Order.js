@@ -51,6 +51,7 @@ class Order extends React.PureComponent {
         const { updateOrderStatus } = this.props
         let data = {
             "status": 1, // 未完成，取消订单
+            "id": 1, // 该订单id编号
         }
         updateOrderStatus(update_order_status, 'POST', data)
         Loading.show('删除')
