@@ -10,21 +10,23 @@ import { connect } from 'react-redux'
 import constant from '../../expand/api'
 import { Loading } from '../../utils/Loading'
 import { Toast } from '../../utils/Toast'
+import NavigationUtil from '../../utils/NavigationUtil'
 
-const { address } = constant
+const { address, addOnesOrder } = constant
 
 class ConfirmOrder extends React.PureComponent {
     state = {
         isCheckBox: false,
         priceNum: 1,
         checkBox: false,
-        desc: null, // 订单备注
-        deliveryTime: '12:30'
+        remarks: null, // 订单备注
+        deliveryTime: '12:30',
+        price: '12', // 商品价格默认
     }
     componentDidMount() {
         let { orderNum } = this.props.navigation.state.params
         // 父组件传过来的值
-        this.setState({priceNum: orderNum})
+        this.setState({ priceNum: orderNum })
         this.getAddress()
     }
 
@@ -37,11 +39,20 @@ class ConfirmOrder extends React.PureComponent {
         getAddress(address, 'POST', data)
     }
 
-    // 订单备注
-    orderBeiZhu = (desc) => {
-        this.setState({ desc })
+    // 全选
+    _allSelectCheckBox = () => {
+        this.setState({
+            isCheckBox: !this.state.isCheckBox,
+            checkBox: !this.state.checkBox
+        })
     }
 
+    // 订单备注
+    orderBeiZhu = (remarks) => {
+        this.setState({ remarks })
+    }
+
+    // 减少商品数量
     _less = () => {
         this.setState({
             priceNum: this.state.priceNum - 1
@@ -50,17 +61,51 @@ class ConfirmOrder extends React.PureComponent {
         //     Toast.showToast('最少选择一件餐食')
         // }
     }
+    // 添加商品数量
     _add = () => {
         this.setState({
             priceNum: this.state.priceNum + 1
         })
     }
+
+    /**
+     * 确认支付页
+     */
+    _confirm = () => {
+        let { priceNum, remarks, deliveryTime, checkBox } = this.state
+        const { addOrderCat } = this.props
+        // 通过传过来的字段，带到后台
+        let data = {
+            "order_title": "西红柿炒鸡蛋",
+            "order_desc": "好吃不乖，经济实惠！谁卖谁受益",
+            "price": "12",
+            "order_url": "url",
+            "price_num": priceNum,
+            "remarks": "描述", // 订单备注
+        }
+        // 当没有选择时
+        if (checkBox == true) {
+            addOrderCat(addOnesOrder, 'POST', data)
+            Loading.show('提交中')
+            setTimeout(() => {
+                // 这里只是做模拟，没有做真正的提交支付操作
+                // 集成微信支付， 去微信中申请appid，添加进来 即可调取
+                Loading.hidden()
+                Toast.showToast('支付成功')
+                // 跳转订单页面
+                // NavigationUtil.goPage({}, 'Order')
+            }, 300)
+        } else {
+            Toast.showToast('请选择你要购买的商品')
+        }
+    }
+
     _header = () => {
         const address = this.props.address.item
         if (!address) {
-            return Loading.show('获取中...')
+            // return Loading.show('获取中...')
         } else {
-            Loading.hidden()
+            // Loading.hidden()
             return (
                 <>
                     {address.map(a => (
@@ -97,9 +142,7 @@ class ConfirmOrder extends React.PureComponent {
                 <View style={styles.selectBox}>
                     <CheckBox
                         isCheckBox={this.state.isCheckBox}
-                        onCheckBox={() => {
-                            this.setState({ isCheckBox: !this.state.isCheckBox })
-                        }}
+                        onCheckBox={this._allSelectCheckBox}
                     />
                     <Text style={styles.selectText}>全选</Text>
                 </View>
@@ -112,10 +155,11 @@ class ConfirmOrder extends React.PureComponent {
                             })
                         }}
                     />
+                    {/* 这里的订单数据都是由 props 带过来的 */}
                     <OrderItem
                         title={'title'}
                         desc={'desc'}
-                        num={'1212'}
+                        price={'12'}
                         onAdd={this._add}
                         onLess={this._less}
                         priceNum={this.state.priceNum}
@@ -148,7 +192,7 @@ class ConfirmOrder extends React.PureComponent {
             <View style={styles.fotterBox}>
                 <View style={styles.leftBox}>
                     <Text style={styles.he}>合计</Text>
-                    <Text style={styles.jia}>￥18:00</Text>
+                    <Text style={styles.jia}>￥{Number(this.state.price) * this.state.priceNum}</Text>
                     <Text style={styles.line}>|</Text>
                     <Text style={styles.you}>以优惠5元</Text>
                 </View>
@@ -177,6 +221,9 @@ class ConfirmOrder extends React.PureComponent {
 export default connect(({ address }) => ({ address }), dispatch => ({
     getAddress(url, method, data) {
         dispatch(actions.getAddress(url, method, data))
+    },
+    addOrderCat(url, method, data) {
+        dispatch(actions.addOrderCat(url, method, data))
     }
 }))(ConfirmOrder)
 

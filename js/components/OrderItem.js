@@ -1,8 +1,9 @@
 import React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import { px2dp } from '../utils/px2dp'
+import PropTypes from 'prop-types'
 
-function OrderItem({ url, title, desc, num, onAdd, onLess, disabled, priceNum }) {
+function OrderItem({ url, title, desc, price, onAdd, onLess, disabled, priceNum }) {
     return (
         <View style={styles.OrderBox}>
             <Image style={styles.imageBox} source={{ uri: url }} />
@@ -10,7 +11,8 @@ function OrderItem({ url, title, desc, num, onAdd, onLess, disabled, priceNum })
                 <Text style={styles.title}>{title}</Text>
                 <Text style={styles.desc}>{desc}</Text>
                 <View style={styles.pricBox}>
-                    <Text>{num}</Text>
+                    {/* 总价格 */}
+                    <Text style={styles.price}>￥{(Number(price) * priceNum)}</Text>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <TouchableOpacity
                             onPress={onLess}
@@ -33,6 +35,10 @@ function OrderItem({ url, title, desc, num, onAdd, onLess, disabled, priceNum })
             </View>
         </View>
     )
+}
+
+OrderItem.propTypes = {
+    price: PropTypes.string,
 }
 
 export default OrderItem
@@ -97,6 +103,10 @@ const styles = StyleSheet.create({
     },
     add: {
         color: '#fff'
+    },
+    price: {
+        color: '#333',
+        fontSize: px2dp(12)
     }
 
 })

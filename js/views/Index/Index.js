@@ -71,8 +71,7 @@ class Index extends React.PureComponent {
 
     _goToPage=()=> {
         let { orderNum } = this.state
-        let data = {
-        }
+        
         Loading.show('加载中...')
         setTimeout(() => {
             Loading.hidden()
