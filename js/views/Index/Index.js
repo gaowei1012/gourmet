@@ -10,6 +10,7 @@ import { Loading } from '../../utils/Loading'
 
 import OrderCat from '../../assets/svg/order.svg'
 import Cat from '../../assets/svg/cat.svg'
+import { Toast } from '../../utils/Toast'
 
 const { shopType } = constant
 
@@ -21,7 +22,8 @@ class Index extends React.PureComponent {
         checkbox: false,
         orderNum: 0,
         price: null,
-        catArr: [], // 购物车数据
+        car: {}, // 购物车数据
+        isSelected: false, // 最多可选一个商品
     }
 
     componentDidMount() {
@@ -40,17 +42,22 @@ class Index extends React.PureComponent {
     }
     // 添加购物车
     handleAddCat = (shop_name, shop_url, shop_detail, price, id) => {
-        let catArr = []
-        let obj = {
-            "shop_name": shop_name,
-            "shop_url": shop_url,
-            "shop_detail": shop_detail,
-            "price": price,
-            "id": id
+        let { orderNum } = this.state
+        if (orderNum == 1) {
+            Toast.showToast('最多添加一件商品')
+        } else {
+            let obj = {
+                "shop_name": shop_name,
+                "shop_url": shop_url,
+                "shop_detail": shop_detail,
+                "price": price,
+                "id": id
+            }
+            this.setState({ car: obj }, () => {
+                console.log('this state car', this.state.car)
+            })
+            this.setState({ orderNum: this.state.orderNum + 1 })
         }
-        catArr.push(obj)
-        console.log('new arr', catArr)
-        this.setState({ orderNum: this.state.orderNum + 1 })
     }
 
     // 内容
@@ -82,6 +89,7 @@ class Index extends React.PureComponent {
                                                 activeOpacity={1}
                                                 onPress={() => this.handleAddCat(s.shop_name, s.shop_url, s.shop_detail, s.price, s.id)}
                                                 style={styles.catBox}
+                                                disabled={this.state.orderNum >= 1 ? true : false}
                                             >
                                                 <Cat width='18' height='18' />
                                                 {/* <Text>加入购物车</Text> */}
@@ -100,12 +108,12 @@ class Index extends React.PureComponent {
 
     // 添加购物车
     _goToPage = () => {
-        let { orderNum } = this.state
+        let { orderNum, car } = this.state
 
         Loading.show('加载中...')
         setTimeout(() => {
             Loading.hidden()
-            NavigationUtil.goPage({ orderNum }, 'ConfirmOrder')
+            NavigationUtil.goPage({ orderNum, car }, 'ConfirmOrder')
         }, 200)
     }
 

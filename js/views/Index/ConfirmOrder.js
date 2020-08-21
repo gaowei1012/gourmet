@@ -26,7 +26,8 @@ class ConfirmOrder extends React.PureComponent {
         longitude: 116.368911
     }
     componentDidMount() {
-        let { orderNum } = this.props.navigation.state.params
+        let { orderNum, car } = this.props.navigation.state.params
+        console.log('car', car)
         // 父组件传过来的值
         this.setState({ priceNum: orderNum })
         this.getAddress()
