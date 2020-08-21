@@ -23,13 +23,24 @@ class ConfirmOrder extends React.PureComponent {
         deliveryTime: '12:30',
         price: '12', // 商品价格默认
         latitude: 39.887923,
-        longitude: 116.368911
+        longitude: 116.368911,
+        shop_name: null,
+        shop_detail: null,
+        shop_url: null,
+        price: null,
+        id: null,
     }
     componentDidMount() {
-        let { orderNum, car } = this.props.navigation.state.params
-        console.log('car', car)
+        let { orderNum, shop_detail, shop_name, shop_url, price, id } = this.props.navigation.state.params
         // 父组件传过来的值
-        this.setState({ priceNum: orderNum })
+        this.setState({
+            shop_name: shop_name,
+            shop_detail: shop_detail,
+            shop_url: shop_url,
+            price: price,
+            id: id,
+            priceNum: orderNum
+        })
         this.getAddress()
     }
 
@@ -75,7 +86,7 @@ class ConfirmOrder extends React.PureComponent {
      * 确认支付页
      */
     _confirm = () => {
-        let { priceNum, remarks, deliveryTime, checkBox, latitude, longitude} = this.state
+        let { priceNum, remarks, deliveryTime, checkBox, latitude, longitude } = this.state
         const { addOrderCat } = this.props
         // 通过传过来的字段，带到后台
         let data = {
@@ -128,7 +139,7 @@ class ConfirmOrder extends React.PureComponent {
         }
     }
     render() {
-        let { deliveryTime } = this.state
+        let { deliveryTime, shop_detail, shop_name, shop_url, price } = this.state
         const StatusBar = {
             backgroundColor: "#ffffff",
             barStyle: "dark-content",
@@ -163,14 +174,14 @@ class ConfirmOrder extends React.PureComponent {
                     />
                     {/* 这里的订单数据都是由 props 带过来的 */}
                     <OrderItem
-                        title={'title'}
-                        desc={'desc'}
-                        price={'12'}
+                        title={shop_name}
+                        desc={shop_detail}
+                        price={price}
                         onAdd={this._add}
                         onLess={this._less}
                         priceNum={this.state.priceNum}
                         disabled={this.state.priceNum == 1 ? true : false}
-                        url={'https://iph.href.lu/80x80?fg=666666&bg=cccccc'}
+                        url={shop_url}
                     />
                 </View>
             </View>

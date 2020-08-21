@@ -24,6 +24,11 @@ class Index extends React.PureComponent {
         price: null,
         car: {}, // 购物车数据
         isSelected: false, // 最多可选一个商品
+        shop_name: null,
+        shop_detail: null,
+        shop_url: null,
+        price: null,
+        id: null,
     }
 
     componentDidMount() {
@@ -42,22 +47,14 @@ class Index extends React.PureComponent {
     }
     // 添加购物车
     handleAddCat = (shop_name, shop_url, shop_detail, price, id) => {
-        let { orderNum } = this.state
-        if (orderNum == 1) {
-            Toast.showToast('最多添加一件商品')
-        } else {
-            let obj = {
-                "shop_name": shop_name,
-                "shop_url": shop_url,
-                "shop_detail": shop_detail,
-                "price": price,
-                "id": id
-            }
-            this.setState({ car: obj }, () => {
-                console.log('this state car', this.state.car)
-            })
-            this.setState({ orderNum: this.state.orderNum + 1 })
-        }
+        this.setState({
+            shop_name: shop_name,
+            shop_detail: shop_detail,
+            shop_url: shop_url,
+            price: price,
+            id: id
+        })
+        this.setState({ orderNum: this.state.orderNum + 1 })
     }
 
     // 内容
@@ -108,12 +105,11 @@ class Index extends React.PureComponent {
 
     // 添加购物车
     _goToPage = () => {
-        let { orderNum, car } = this.state
-
+        let { orderNum, shop_detail, shop_name, shop_url, price, id } = this.state
         Loading.show('加载中...')
         setTimeout(() => {
             Loading.hidden()
-            NavigationUtil.goPage({ orderNum, car }, 'ConfirmOrder')
+            NavigationUtil.goPage({ orderNum, shop_detail, shop_name, shop_url, price, id }, 'ConfirmOrder')
         }, 200)
     }
 
