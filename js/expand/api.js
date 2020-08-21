@@ -12,6 +12,7 @@ const constant = {
     add_address: '/api/address/insertAddress',
     get_order: '/api/order/getOrderById',
     update_order_status: '/api/order/updateOrderStatus',
+    find_order_status: '/api/order/findOrderByStatus',
 }
 
 export default constant

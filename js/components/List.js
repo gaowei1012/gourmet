@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import PropTypes from 'prop-types'
 import { Image } from 'react-native-elements'
 import { px2dp } from '../utils/px2dp'
+import moment from 'moment'
 
 function List({ date, num, nowDate, url, text, noRecommend, recommend }) {
     return (
@@ -14,8 +15,8 @@ function List({ date, num, nowDate, url, text, noRecommend, recommend }) {
                 />
                 <View style={styles.topDesc}>
                     <Text style={styles.desc}>订单号: {date}</Text>
-                    <Text style={styles.desc}>下单时间: {num}</Text>
-                    <Text style={styles.desc}>送达时间: {nowDate}</Text>
+                    <Text style={styles.desc}>下单时间: {moment(num).format('YYYY-MM-DD hh:mm:ss')}</Text>
+                    <Text style={styles.desc}>送达时间: {moment(nowDate).format('YYYY-MM-DD hh:mm:ss')}</Text>
                 </View>
             </View>
             <View style={styles.btnBox}>

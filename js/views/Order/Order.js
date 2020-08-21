@@ -11,7 +11,7 @@ import Modal from 'react-native-modal'
 import { Loading } from '../../utils/Loading'
 import { Toast } from '../../utils/Toast'
 
-const { get_order, update_order_status } = constant
+const { get_order, update_order_status, find_order_status } = constant
 
 class Order extends React.PureComponent {
     state = {
@@ -33,7 +33,19 @@ class Order extends React.PureComponent {
             "id": id
         }
         getOrder(get_order, 'POST', data)
+
+        this.getOrderStatus()
     }
+
+    // orders status
+    getOrderStatus() {
+        let { getOrderStatus } = this.props
+        let data = {
+            "status": 0
+        }
+        getOrderStatus(find_order_status, 'POST', data)
+    }
+
     // 取消订单
     _cancelOrder = () => {
         this.setState({ isVisible: true })
@@ -59,6 +71,35 @@ class Order extends React.PureComponent {
             Loading.hidden()
             Toast.showToast('删除成功')
         }, 300)
+    }
+
+    // 推荐该商品
+    handleRecommend = () => {
+        Toast.showToast('推荐成功')
+    }
+
+    // 完成 status: 0
+    _list=()=> {
+        let order = this.props.findOrderStatus.item;
+        console.log('order', order)
+        if (order == null) {
+            return Loading.show('获取中')
+        } else {
+            return (
+                <>
+                    {order.map(o => (
+                        <List
+                            key={o.id}
+                            date={o.id}
+                            num={o.create_at}
+                            nowDate={o.create_at}
+                            url={o.shop_url}
+                            recommend={this.handleRecommend}
+                        />
+                    ))}
+                </>
+            )
+        }
     }
 
     render() {
@@ -127,7 +168,7 @@ class Order extends React.PureComponent {
                         style={{ height: '100%' }}
                         horizontal={false}
                     >
-                        <List />
+                        {this._list()}
                     </ScrollView>
                 </View> : null}
             </>
@@ -169,12 +210,15 @@ class Order extends React.PureComponent {
     }
 }
 
-export default connect(({ getOrder }) => ({ getOrder }), dispatch => ({
+export default connect(({ getOrder, findOrderStatus }) => ({ getOrder, findOrderStatus }), dispatch => ({
     getOrder(url, method, data) {
         dispatch(actions.getOrder(url, method, data))
     },
     updateOrderStatus(url, method, data) {
         dispatch(actions.updateOrderStatus(url, method, data))
+    },
+    getOrderStatus(url, method, data) {
+        dispatch(actions.getOrderStatus(url, method, data))
     }
 }))(Order)
 
