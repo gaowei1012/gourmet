@@ -22,6 +22,8 @@ class ConfirmOrder extends React.PureComponent {
         remarks: null, // 订单备注
         deliveryTime: '12:30',
         price: '12', // 商品价格默认
+        latitude: 39.887923,
+        longitude: 116.368911
     }
     componentDidMount() {
         let { orderNum } = this.props.navigation.state.params
@@ -72,7 +74,7 @@ class ConfirmOrder extends React.PureComponent {
      * 确认支付页
      */
     _confirm = () => {
-        let { priceNum, remarks, deliveryTime, checkBox } = this.state
+        let { priceNum, remarks, deliveryTime, checkBox, latitude, longitude} = this.state
         const { addOrderCat } = this.props
         // 通过传过来的字段，带到后台
         let data = {
@@ -82,6 +84,9 @@ class ConfirmOrder extends React.PureComponent {
             "order_url": "url",
             "price_num": priceNum,
             "remarks": "描述", // 订单备注
+            "latitude": latitude, // 纬度
+            "longitude": longitude, // 经度
+            "status": "0", // 未完成
         }
         // 当没有选择时
         if (checkBox == true) {

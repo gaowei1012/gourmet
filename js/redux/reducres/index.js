@@ -1,8 +1,9 @@
-import {combineReducers} from 'redux'
-import {rootCom, RootNavigation} from '../../navigation/AppNavigation'
+import { combineReducers } from 'redux'
+import { rootCom, RootNavigation } from '../../navigation/AppNavigation'
 import theme from './theme/index'
-import {onRecommenAction, onRegisterAction, onLoginAction, onAddAddressAction} from '../../views/Personal/redux/reducre'
-import {onShopTypeAction, onAddressAction, onAddOrderCatAction} from '../../views/Index/redux/reducres'
+import { onRecommenAction, onRegisterAction, onLoginAction, onAddAddressAction } from '../../views/Personal/redux/reducre'
+import { onShopTypeAction, onAddressAction, onAddOrderCatAction } from '../../views/Index/redux/reducres'
+import { onGetOrderAction, onUpdateOrderStatusAction } from '../../views/Order/redux/reducres'
 
 const navState = RootNavigation.router.getStateForAction(
     RootNavigation.router.getActionForPathAndParams(rootCom),
@@ -23,6 +24,8 @@ const root = combineReducers({
     login: onLoginAction,
     orderCat: onAddOrderCatAction,
     addAddress: onAddAddressAction,
+    getOrder: onGetOrderAction,
+    updateOrderStatus: onUpdateOrderStatusAction,
 })
 
 export default root

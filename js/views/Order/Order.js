@@ -1,9 +1,17 @@
 import React from 'react'
-import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet, ScrollView} from 'react-native'
+import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet, ScrollView } from 'react-native'
 import TopNavigationBar from '../../common/TopNavigationBar'
-import { px2dp, width, height } from '../../utils/px2dp'
-import { Button } from 'react-native-elements'
+import { px2dp, width } from '../../utils/px2dp'
 import List from '../../components/List'
+import { MapView } from 'react-native-amap3d'
+import { connect } from 'react-redux'
+import actions from './redux/actions'
+import constant from '../../expand/api'
+import Modal from 'react-native-modal'
+import { Loading } from '../../utils/Loading'
+import { Toast } from '../../utils/Toast'
+
+const { get_order, update_order_status } = constant
 
 class Order extends React.PureComponent {
     state = {
@@ -12,11 +20,48 @@ class Order extends React.PureComponent {
             { id: 2, type: 2, text: '已完成订单' }
         ],
         type: 1,
+        id: 1,
+        isVisible: false, // 取消订单 visible
     }
     swtchTab = (type) => {
         this.setState({ type })
     }
+    componentDidMount() {
+        let { getOrder } = this.props
+        let { id } = this.state
+        let data = {
+            "id": id
+        }
+        getOrder(get_order, 'POST', data)
+    }
+    // 取消订单
+    _cancelOrder = () => {
+        this.setState({ isVisible: true })
+    }
+
+    // modal 按钮取消
+    _cancelModal = () => {
+        this.setState({ isVisible: false })
+    }
+
+    //确定取消按钮
+    _saveModal = () => {
+        // 会改变订单状态
+        this.setState({ isVisible: false })
+        const { updateOrderStatus } = this.props
+        let data = {
+            "status": 1, // 未完成，取消订单
+        }
+        updateOrderStatus(update_order_status, 'POST', data)
+        Loading.show('删除')
+        setTimeout(() => {
+            Loading.hidden()
+            Toast.showToast('删除成功')
+        }, 300)
+    }
+
     render() {
+        let { isVisible } = this.state
         const StatusBar = {
             backgroundColor: "#E8785F",
             barStyle: "dark-content",
@@ -27,7 +72,6 @@ class Order extends React.PureComponent {
                 statusBar={StatusBar}
                 style={{ backgroundColor: "#E8785F" }}
                 color="#fff"
-            // rightButton={_addLand}
             />
         );
         const _menu = (
@@ -48,6 +92,13 @@ class Order extends React.PureComponent {
         const _content = (
             <>
                 {this.state.type === 1 ? <View>
+                    <MapView
+                        style={{ width: '100%', height: '100%' }}
+                        center={{
+                            latitude: 39.91095,
+                            longitude: 116.37296
+                        }}
+                    />
                     <View style={styles.noOrderBox}>
                         <View style={styles.l} />
                         <View style={styles.timeBox}>
@@ -59,7 +110,7 @@ class Order extends React.PureComponent {
                         <TouchableOpacity
                             activeOpacity={1}
                             style={styles.btn}
-                            onPress={this._comfiom}
+                            onPress={this._cancelOrder}
                         >
                             <Text style={styles.comfiomText}>取消订单</Text>
                         </TouchableOpacity>
@@ -72,23 +123,59 @@ class Order extends React.PureComponent {
                     </View>
                     <Text style={styles.pingDesc}>评价描述</Text>
                     <ScrollView
-                        style={{height: '100%'}}
+                        style={{ height: '100%' }}
                         horizontal={false}
                     >
-                        <List/>
+                        <List />
                     </ScrollView>
                 </View> : null}
             </>
+        );
+        // 取消订单
+        const _modal = (
+            <Modal
+                isVisible={isVisible}
+            >
+                <View style={styles.modalBox}>
+                    <Text style={styles.updateTitle}>是否取消订单?</Text>
+                    <View style={styles.updateFotter}>
+                        <TouchableOpacity
+                            activeOpacity={1}
+                            onPress={this._cancelModal}
+                            style={[styles.btnModal, { borderRightColor: 'rgba(187, 187, 187, 1)', borderRightWidth: px2dp(.5) }]}
+                        >
+                            <Text style={styles.canleText}>取消</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            activeOpacity={1}
+                            onPress={this._saveModal}
+                            style={styles.btnModal}
+                        >
+                            <Text style={styles.downloadText}>确定</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
         )
-        return <SafeAreaView style={styles.container}>
-            {renderTopBar}
-            {_menu}
-            {_content}
-        </SafeAreaView>
+        return (
+            <SafeAreaView style={styles.container}>
+                {renderTopBar}
+                {_menu}
+                {_content}
+                {_modal}
+            </SafeAreaView>
+        )
     }
 }
 
-export default Order
+export default connect(({ getOrder }) => ({ getOrder }), dispatch => ({
+    getOrder(url, method, data) {
+        dispatch(actions.getOrder(url, method, data))
+    },
+    updateOrderStatus(url, method, data) {
+        dispatch(actions.updateOrderStatus(url, method, data))
+    }
+}))(Order)
 
 const styles = StyleSheet.create({
     container: {
@@ -128,12 +215,16 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff'
     },
     noOrderBox: {
-        marginTop: px2dp(490),
+        position: 'absolute',
+        bottom: px2dp(80),
+        left: px2dp(14),
+        // marginTop: px2dp(490),
         width: px2dp(345),
         alignSelf: 'center',
         height: px2dp(100),
         backgroundColor: '#fff',
-        borderRadius: px2dp(6)
+        borderRadius: px2dp(6),
+        zIndex: 9999
     },
     l: {
         marginTop: px2dp(8),
@@ -197,5 +288,47 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: px2dp(14),
         fontWeight: '600'
+    },
+    modalBox: {
+        width: px2dp(259),
+        height: px2dp(100),
+        borderRadius: px2dp(13),
+        backgroundColor: '#FDFFFB',
+        alignSelf: 'center',
+        alignItems: 'center'
+    },
+    updateTitle: {
+        fontSize: px2dp(16),
+        color: '#030303',
+        marginTop: px2dp(21)
+    },
+    updateVersion: {
+        marginTop: px2dp(4),
+        fontSize: px2dp(14),
+        color: '#333'
+    },
+    updateFotter: {
+        position: 'absolute',
+        bottom: 0,
+        width: '100%',
+        height: px2dp(44),
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        borderTopWidth: px2dp(.5),
+        borderTopColor: 'rgba(187, 187, 187, 1)'
+    },
+    btnModal: {
+        width: px2dp(259 / 2),
+        height: px2dp(44),
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    canleText: {
+        color: '#E31E1E',
+        fontSize: px2dp(17)
+    },
+    downloadText: {
+        fontSize: px2dp(17),
+        color: '#4DAB6D'
     }
 })

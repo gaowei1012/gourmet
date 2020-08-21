@@ -10,6 +10,8 @@ const constant = {
     address: '/api/address/getAddress',
     recommen: '/api/recommen/findRecommen',
     add_address: '/api/address/insertAddress',
+    get_order: '/api/order/getOrderById',
+    update_order_status: '/api/order/updateOrderStatus',
 }
 
 export default constant
