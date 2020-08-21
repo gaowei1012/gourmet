@@ -8,6 +8,7 @@ import actions from './redux/action'
 import constant from '../../expand/api'
 import { Loading } from '../../utils/Loading'
 import NavigationUtil from '../../utils/NavigationUtil'
+import { Toast } from '../../utils/Toast'
 
 const { register, login } = constant
 
@@ -59,20 +60,29 @@ class Login extends React.PureComponent {
     // 登录
     _submit = () => {
         const { getLogin } = this.props
-        let data = {
-            "username": this.state.account,
-            "password": this.state.password
-        }
-        getLogin(login, 'POST', data)
-        Loading.show()
-        setTimeout(() => {
-            let login = this.props.login.item
-            if (login.code == 1) {
-                // 登录成功
-                Loading.hidden()
-                NavigationUtil.goBack(this.props.navigation)
+        let { account, password } = this.state
+        if (account == null) {
+            Toast.showToast('请填写用户名')
+        } else if (password == null) {
+            Toast.showToast('请填写密码')
+        } else {
+            let data = {
+                "username": this.state.account,
+                "password": this.state.password
             }
-        }, 800)
+            getLogin(login, 'POST', data)
+            Loading.show('登录中')
+            setTimeout(() => {
+                let login = this.props.login.item
+                console.log('login', login)
+                /* 验证登录 */
+                if (login.code == 1) {
+                    // 登录成功
+                    Loading.hidden()
+                    NavigationUtil.goBack(this.props.navigation)
+                }
+            }, 800)
+        }
     }
     render() {
         const StatusBar = {
@@ -133,7 +143,7 @@ class Login extends React.PureComponent {
                         activeOpacity={1}
                         onPress={this._switch}
                     >
-                        <Text style={{color: '#333'}}>注册</Text>
+                        <Text style={{ color: '#333' }}>注册</Text>
                     </TouchableOpacity>
                     {/* <TouchableOpacity
                         activeOpacity={1}
