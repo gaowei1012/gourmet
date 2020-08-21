@@ -9,6 +9,7 @@ const constant = {
     delRrderById: '/api/order/deleteOrderById',
     address: '/api/address/getAddress',
     recommen: '/api/recommen/findRecommen',
+    add_address: '/api/address/insertAddress',
 }
 
 export default constant

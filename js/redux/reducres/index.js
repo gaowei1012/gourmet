@@ -1,7 +1,7 @@
 import {combineReducers} from 'redux'
 import {rootCom, RootNavigation} from '../../navigation/AppNavigation'
 import theme from './theme/index'
-import {onRecommenAction, onRegisterAction, onLoginAction} from '../../views/Personal/redux/reducre'
+import {onRecommenAction, onRegisterAction, onLoginAction, onAddAddressAction} from '../../views/Personal/redux/reducre'
 import {onShopTypeAction, onAddressAction, onAddOrderCatAction} from '../../views/Index/redux/reducres'
 
 const navState = RootNavigation.router.getStateForAction(
@@ -22,6 +22,7 @@ const root = combineReducers({
     recommen: onRecommenAction,
     login: onLoginAction,
     orderCat: onAddOrderCatAction,
+    addAddress: onAddAddressAction,
 })
 
 export default root

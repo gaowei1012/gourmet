@@ -29,7 +29,8 @@ class Personal extends React.PureComponent {
     _list = () => {
         const recommen = this.props.recommen.item
         if (!recommen) {
-            return Loading.show()
+            Loading.show()
+            return
         } else {
             Loading.hidden()
             return <ScrollView
@@ -74,7 +75,13 @@ class Personal extends React.PureComponent {
                         <Text style={styles.title}>Hi，风湿老年人</Text>
                         <Text style={styles.lv}>L1 单层汉堡</Text>
                     </View>
-                    <HanBao width="28" height="28" />
+                    <TouchableOpacity
+                        onPress={() => {
+                            NavigationUtil.goPage({}, 'Address')
+                        }}
+                    >
+                        <HanBao width="28" height="28" />
+                    </TouchableOpacity>
                 </View>
             </View>
         );

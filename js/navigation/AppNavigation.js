@@ -16,8 +16,8 @@ import Order from '../views/Order/Order';
 import Personal from '../views/Personal/Personal';
 import Login from '../views/Personal/Login';
 import ConfirmOrder from '../views/Index/ConfirmOrder'
-
-
+import Address from '../views/Personal/Address'
+import Register from '../views/Personal/Register'
 
 export const rootCom = 'Init';
 
@@ -63,6 +63,18 @@ const MainNavigator = createStackNavigator({
     },
     ConfirmOrder: {
         screen: ConfirmOrder,
+        navigationOptions: {
+            header: null
+        }
+    },
+    Address: {
+        screen: Address,
+        navigationOptions: {
+            header: null
+        }
+    },
+    Register: {
+        screen: Register,
         navigationOptions: {
             header: null
         }

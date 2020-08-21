@@ -7,6 +7,8 @@ export const get_recommen_success = 'get_recommen_success';
 export const get_recommen_fail = 'get_recommen_fail';
 export const get_login_success = 'get_login_success';
 export const get_login_fail = 'get_login_fail'
+export const add_address_success = 'add_address_success'
+export const add_address_fail = 'add_address_fail'
 
 function getLogin(url, method, data) {
     return dispatch => {
@@ -47,8 +49,22 @@ function getRecommen(url, method) {
     }
 }
 
+function addAddressData(url, method, data) {
+    return dispatch => {
+        request(url, method, data)
+            .then(res => {
+                const data = res.data
+                handleData(dispatch, data, get_recommen_success)
+            })
+            .catch(err => {
+                handleErrorData(dispatch, err, get_recommen_fail)
+            })
+    }
+}
+
 export default {
     getRegister,
     getRecommen,
     getLogin,
+    addAddressData,
 }

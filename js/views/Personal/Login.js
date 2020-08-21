@@ -138,21 +138,16 @@ class Login extends React.PureComponent {
         );
         const _password = (
             <>
-                {this.state.register ? <View style={styles.footerBox}>
+                <View style={styles.footerBox}>
                     <TouchableOpacity
                         activeOpacity={1}
-                        onPress={this._switch}
+                        onPress={() => {
+                            NavigationUtil.goPage({}, 'Register')
+                        }}
                     >
                         <Text style={{ color: '#333' }}>注册</Text>
                     </TouchableOpacity>
-                    {/* <TouchableOpacity
-                        activeOpacity={1}
-                        onPress={this.handleSubmit}
-                        style={styles.password}
-                    >
-                        <Text style={styles.passwordText}>忘记密码？</Text>
-                    </TouchableOpacity> */}
-                </View> : null}
+                </View>
             </>
         );
         const _footerBtn = (

@@ -5,6 +5,8 @@ import {
     get_recommen_success,
     get_login_fail,
     get_login_success,
+    add_address_fail,
+    add_address_success,
 } from './action'
 
 
@@ -56,8 +58,25 @@ function onRecommenAction(state = {}, action) {
     }
 }
 
+function onAddAddressAction(state = {}, action) {
+    switch(action.type) {
+        case add_address_success:
+            return {
+                ...state,
+                item: action.item
+            }
+        case add_address_fail:
+            return {
+                ...state
+            }
+        default:
+            return state
+    }
+}
+
 export {
     onRecommenAction,
     onRegisterAction,
     onLoginAction,
+    onAddAddressAction,
 }
