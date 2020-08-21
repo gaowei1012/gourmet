@@ -22,6 +22,7 @@ class Order extends React.PureComponent {
         type: 1,
         id: 1,
         isVisible: false, // 取消订单 visible
+        isHide: false
     }
     swtchTab = (type) => {
         this.setState({ type })
@@ -71,6 +72,9 @@ class Order extends React.PureComponent {
             Loading.hidden()
             Toast.showToast('删除成功')
         }, 300)
+
+        // 隐藏地图
+        this.setState({isHide: true})
     }
 
     // 推荐该商品
@@ -79,7 +83,7 @@ class Order extends React.PureComponent {
     }
 
     // 完成 status: 0
-    _list=()=> {
+    _list = () => {
         let order = this.props.findOrderStatus.item;
         console.log('order', order)
         if (order == null) {
@@ -133,31 +137,35 @@ class Order extends React.PureComponent {
         );
         const _content = (
             <>
-                {this.state.type === 1 ? <View>
-                    <MapView
-                        style={{ width: '100%', height: '100%' }}
-                        center={{
-                            latitude: 39.91095,
-                            longitude: 116.37296
-                        }}
-                    />
-                    <View style={styles.noOrderBox}>
-                        <View style={styles.l} />
-                        <View style={styles.timeBox}>
-                            <Text style={styles.desc}>预计</Text>
-                            <Text style={styles.timeDesc}>11:30</Text>
-                            <Text style={styles.desc}>送达</Text>
+                {this.state.type === 1 ? <>
+                    {this.state.isHide ? <View style={styles.notOrder}>
+                        <Text>暂无订单~</Text>
+                    </View> : <View>
+                        <MapView
+                            style={{ width: '100%', height: '100%' }}
+                            center={{
+                                latitude: 39.91095,
+                                longitude: 116.37296
+                            }}
+                        />
+                        <View style={styles.noOrderBox}>
+                            <View style={styles.l} />
+                            <View style={styles.timeBox}>
+                                <Text style={styles.desc}>预计</Text>
+                                <Text style={styles.timeDesc}>11:30</Text>
+                                <Text style={styles.desc}>送达</Text>
+                            </View>
+                            <Text style={styles.desc}>由店家配送</Text>
+                            <TouchableOpacity
+                                activeOpacity={1}
+                                style={styles.btn}
+                                onPress={this._cancelOrder}
+                            >
+                                <Text style={styles.comfiomText}>取消订单</Text>
+                            </TouchableOpacity>
                         </View>
-                        <Text style={styles.desc}>由店家配送</Text>
-                        <TouchableOpacity
-                            activeOpacity={1}
-                            style={styles.btn}
-                            onPress={this._cancelOrder}
-                        >
-                            <Text style={styles.comfiomText}>取消订单</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View> : null}
+                    </View>}
+                </> : null}
                 {this.state.type === 2 ? <View style={styles.carryBox}>
                     <View style={styles.carryTop}>
                         <View style={styles.carryLine} />
@@ -375,5 +383,11 @@ const styles = StyleSheet.create({
     downloadText: {
         fontSize: px2dp(17),
         color: '#4DAB6D'
+    },
+    notOrder: {
+        height: '100%',
+        alignSelf: 'center',
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 })
