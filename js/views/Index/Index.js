@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, ScrollView, SafeAreaView, Image, TouchableOpacity, ViewBase } from 'react-native'
+import { View, Text, StyleSheet, FlatList, SafeAreaView, Image, TouchableOpacity, ScrollView, Alert } from 'react-native'
 import { px2dp, height } from '../../utils/px2dp'
 import TabBar from '../../components/TabBar'
 import CheckBox from '../../components/CheckBox'
@@ -10,6 +10,7 @@ import constant from '../../expand/api'
 import { Loading } from '../../utils/Loading'
 
 import OrderCat from '../../assets/svg/order.svg'
+import Cat from '../../assets/svg/cat.svg'
 
 const { shopType } = constant
 
@@ -42,10 +43,18 @@ class Index extends React.PureComponent {
         this.setState({ checkbox: !this.state.checkbox })
     }
     // 添加购物车
-    _addCat = () => {
-        this.setState({orderNum: this.state.orderNum + 1})
+    handleAddCat = (id) => {
+        this.setState({ orderNum: this.state.orderNum + 1 })
     }
 
+    // 商品列表
+    _renderItem(data) {
+        console.log(data)
+        let shop = data.item
+        
+    }
+
+    // 内容
     _content = () => {
         const shop = this.props.shop.item
         if (!shop) {
@@ -53,56 +62,53 @@ class Index extends React.PureComponent {
         } else {
             Loading.hidden()
             return (
-                <ScrollView
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                >
-                    {shop.map(s => (
-                        <Image
-                            key={s.id}
-                            style={styles.scrollItem}
-                            source={{ uri: s.shop_url }}
-                        />
-                    ))}
+                <ScrollView>
+                    {shop.map(s => {
+                        return <View key={s.id} style={styles.shopWrap}>
+                        <View style={styles.shopItemBox}>
+                            <Image
+                                source={{ uri: s.shop_url }}
+                                style={styles.shopImage}
+                            />
+                            <View style={styles.contentBox}>
+                                <View style={styles.shopConTopBox}>
+                                    <Text style={styles.shop_name}>{s.shop_name}</Text>
+                                    <Text style={styles.shop_detail}>{s.shop_detail}</Text>
+                                </View>
+                                <View style={styles.shopConBtnBox}>
+                                    <Text style={styles.price}>￥{s.price}</Text>
+                                    <TouchableOpacity
+                                        activeOpacity={1}
+                                        onPress={() => this.handleAddCat(s.id)}
+                                        style={styles.catBox}
+                                    >
+                                        <Cat width='18' height='18' />
+                                        {/* <Text>加入购物车</Text> */}
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                    })}
                 </ScrollView>
             )
         }
     }
 
-    _goToPage=()=> {
+    // 添加购物车
+    _goToPage = () => {
         let { orderNum } = this.state
-        
+
         Loading.show('加载中...')
         setTimeout(() => {
             Loading.hidden()
-            NavigationUtil.goPage({orderNum}, 'ConfirmOrder')
+            NavigationUtil.goPage({ orderNum }, 'ConfirmOrder')
         }, 200)
     }
 
     render() {
         let { orderNum } = this.state
-        const _step = (
-            <View style={styles.stepBox}>
-                <View style={styles.checkBox}>
-                    <CheckBox
-                        onCheckBox={this.onCheckBox}
-                        isCheckBox={this.state.checkbox}
-                    />
-                    <Text style={styles.name}>西红柿炒鸡蛋</Text>
-                </View>
-                <View style={styles.stepCont}>
-                    <Text>今日已有300人下单了</Text>
-                    <TouchableOpacity
-                        style={styles.stepBtn}
-                        activeOpacity={1}
-                        onPress={this._addCat}
-                    >
-                        <Text style={styles.btnText}>￥12.00 来一份</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        );
-        
+
         const order = (
             <TouchableOpacity
                 onPress={this._goToPage}
@@ -122,7 +128,6 @@ class Index extends React.PureComponent {
                     onChange={(index, type) => this.onChangeTab(index, type)}
                 />
                 {this._content()}
-                {_step}
                 {order}
             </SafeAreaView>
         )
@@ -173,7 +178,7 @@ const styles = StyleSheet.create({
     },
     orderBox: {
         position: 'absolute',
-        bottom: px2dp(0),
+        bottom: px2dp(60),
         right: 0,
         width: px2dp(60),
         height: px2dp(36),
@@ -216,5 +221,60 @@ const styles = StyleSheet.create({
     },
     orderText: {
         color: '#333'
+    },
+
+    // 内容列表
+    shopWrap: {
+        height: height,
+    },
+    shopItemBox: {
+        marginVertical: px2dp(15),
+        width: px2dp(340),
+        alignSelf: 'center',
+        // padding: px2dp(8),
+        paddingVertical: px2dp(10),
+        paddingHorizontal: px2dp(6),
+        borderRadius: px2dp(3),
+        backgroundColor: '#F6F7F6',
+        flexDirection: 'row'
+    },
+    shopImage: {
+        width: px2dp(80),
+        height: px2dp(80),
+        borderRadius: px2dp(3)
+    },
+    contentBox: {
+        flexDirection: 'column',
+        marginLeft: px2dp(3),
+    },
+    shopConTopBox: {
+        flexDirection: 'column',
+    },
+    shopConBtnBox: {
+        width: px2dp(240),
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginTop: px2dp(6)
+    },
+    catBox: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    shop_name: {
+        color: '#333',
+        fontSize: px2dp(16),
+        fontWeight: '500',
+        marginVertical: px2dp(3)
+    },
+    shop_detail: {
+        marginVertical: px2dp(8),
+        color: '#333',
+        fontSize: px2dp(14),
+    },
+    price: {
+        color: '#333',
+        fontSize: px2dp(14),
+        fontWeight: '400'
     }
 })

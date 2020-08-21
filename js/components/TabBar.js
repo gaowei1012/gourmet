@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
         height: px2dp(40)
     },
     itemBtn: {
-        paddingHorizontal: px2dp(12),
+        paddingHorizontal: px2dp(3),
         paddingTop: px2dp(2),
         flexDirection: 'column',
         justifyContent: "center",
